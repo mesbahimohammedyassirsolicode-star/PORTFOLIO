@@ -11,9 +11,9 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="hero section">
+    <section id="home" className="section flex min-h-[calc(100vh-110px)] flex-col justify-center gap-4">
       <motion.span
-        className="hero-chip"
+        className="w-fit rounded-full border border-violet-300/35 bg-violet-500/10 px-3.5 py-1.5 text-xs font-medium tracking-wide text-violet-200"
         variants={fadeUp}
         initial="hidden"
         animate="show"
@@ -22,6 +22,7 @@ export default function Hero() {
         Available for freelance & collaborations
       </motion.span>
       <motion.h1
+        className="max-w-[15ch] text-4xl leading-[1.06] font-bold text-white sm:text-5xl lg:text-7xl"
         variants={fadeUp}
         initial="hidden"
         animate="show"
@@ -31,7 +32,7 @@ export default function Hero() {
       </motion.h1>
 
       <motion.p
-        className="hero-title"
+        className="m-0 text-lg font-medium text-slate-300 lg:text-2xl"
         variants={fadeUp}
         initial="hidden"
         animate="show"
@@ -41,7 +42,7 @@ export default function Hero() {
       </motion.p>
 
       <motion.p
-        className="hero-description"
+        className="m-0 max-w-3xl leading-8 text-slate-400"
         variants={fadeUp}
         initial="hidden"
         animate="show"
@@ -53,16 +54,16 @@ export default function Hero() {
       </motion.p>
 
       <motion.div
-        className="hero-actions"
+        className="mt-2 flex flex-wrap gap-3"
         variants={fadeUp}
         initial="hidden"
         animate="show"
         custom={0.55}
       >
-        <a href="#projects" className="btn btn-primary">
+        <a href="#projects" className="btn-primary">
           View Projects
         </a>
-        <a href="#contact" className="btn btn-ghost">
+        <a href="#contact" className="btn-ghost">
           Contact
         </a>
       </motion.div>
