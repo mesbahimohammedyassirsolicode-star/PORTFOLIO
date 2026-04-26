@@ -17,30 +17,40 @@ export default function Navbar({ activeSection }) {
   };
 
   return (
-    <header className="sticky top-0 z-30 py-4">
-      <nav className="mx-auto flex w-[min(1120px,92vw)] items-center justify-between rounded-2xl border border-white/15 bg-slate-950/65 px-4 py-3 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 py-4">
+      <nav className="mx-auto flex w-[min(1160px,92vw)] items-center justify-between rounded-2xl border border-white/15 bg-slate-950/55 px-4 py-3 shadow-[0_16px_40px_rgba(2,6,23,0.45)] backdrop-blur-2xl sm:px-5">
         <motion.button
-          className="cursor-pointer border-0 bg-transparent text-base font-bold tracking-[0.16em] text-white"
+          className="cursor-pointer border-0 bg-transparent text-base font-semibold tracking-[0.18em] text-white"
           onClick={() => handleScroll("home")}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
         >
-          M<span className="brand-accent">Y</span>M
+          MY<span className="brand-accent">M</span>
         </motion.button>
 
         <div className="hidden flex-wrap gap-1 md:flex">
           {navItems.map((item) => (
             <motion.button
               key={item.id}
-              className={`rounded-lg border border-transparent px-3 py-1.5 text-sm transition ${
+              className={`relative rounded-lg border border-transparent px-3.5 py-2 text-sm transition ${
                 activeSection === item.id
-                    ? "nav-link-active"
+                  ? "nav-link-active"
                   : "text-slate-400 hover:bg-white/8 hover:text-white"
               }`}
               onClick={() => handleScroll(item.id)}
-              whileHover={{ y: -2 }}
+              whileHover={{ y: -1.5 }}
               whileTap={{ y: 0 }}
             >
+              {activeSection === item.id ? (
+                <motion.span
+                  className="absolute inset-x-2 -bottom-[3px] h-[2px] rounded-full"
+                  layoutId="active-nav-indicator"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, var(--accent-from), var(--accent-mid), var(--accent-to))",
+                  }}
+                />
+              ) : null}
               {item.label}
             </motion.button>
           ))}
@@ -60,7 +70,7 @@ export default function Navbar({ activeSection }) {
       <AnimatePresence>
         {isMenuOpen ? (
           <motion.div
-            className="mx-auto mt-2 flex w-[min(1120px,92vw)] flex-col gap-1 rounded-2xl border border-white/15 bg-slate-950/90 p-2 backdrop-blur-xl md:hidden"
+            className="mx-auto mt-2 flex w-[min(1160px,92vw)] flex-col gap-1 rounded-2xl border border-white/15 bg-slate-950/90 p-2 shadow-xl backdrop-blur-2xl md:hidden"
             initial={{ opacity: 0, y: -14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

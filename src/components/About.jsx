@@ -1,56 +1,39 @@
-import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
+import GlassCard from "./ui/GlassCard";
+import SectionShell from "./ui/SectionShell";
 
 export default function About() {
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 26 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.15,
-        ease: "easeOut",
-      },
-    },
-  };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 24 },
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
   };
 
   return (
-    <motion.section
-      id="about"
-      className="section"
-      variants={sectionVariants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.25 }}
-    >
+    <SectionShell id="about" amount={0.25}>
       <SectionTitle
         eyebrow="About"
-        title="Building practical digital products with clean engineering."
-        subtitle="I focus on maintainable architecture, purposeful user experience, and automation that saves real time."
+        title="About Me"
+        subtitle="Focused on building practical systems that connect user experience with reliable logic."
       />
-      <motion.div
-        className="glass space-y-4 p-6 sm:p-7"
+      <GlassCard
+        className="p-6 sm:p-8"
         variants={itemVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.5 }}
       >
-        <p className="leading-8 text-slate-300">
-          I am Mohammed Yassir Mesbahi, a full-stack developer in training with
-          a strong foundation in computerized management. I combine frontend
-          precision and backend structure to build systems that are reliable,
-          scalable, and user-friendly.
-        </p>
-        <p className="leading-8 text-slate-300">
-          My approach is simple: design clean interfaces, build robust logic,
-          and use AI automation to improve delivery speed and product quality.
-          I enjoy working on projects that turn complex workflows into clear,
-          efficient digital experiences.
-        </p>
-      </motion.div>
-    </motion.section>
+        <div className="space-y-4">
+          <p className="leading-8 text-slate-300">
+            I am Mohammed Yassir Mesbahi, a student at Solicode with a growing
+            foundation in web development using HTML, CSS, JavaScript, and PHP.
+          </p>
+          <p className="leading-8 text-slate-300">
+            I enjoy building modern applications where clean frontend interfaces
+            connect with strong backend logic, especially for business and
+            management systems that make workflows simpler and more efficient.
+          </p>
+        </div>
+      </GlassCard>
+    </SectionShell>
   );
 }

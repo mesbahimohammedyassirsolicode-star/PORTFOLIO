@@ -3,7 +3,9 @@ import { motion, useMotionValue, useScroll, useSpring } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
+import Technologies from "./components/Technologies";
 import Skills from "./components/Skills";
+import Tools from "./components/Tools";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import SectionDivider from "./components/SectionDivider";
@@ -18,7 +20,7 @@ function App() {
     []
   );
   const sectionIds = useMemo(
-    () => ["home", "about", "skills", "projects", "contact"],
+    () => ["home", "about", "technologies", "skills", "tools", "projects", "contact"],
     []
   );
   const [activeSection, setActiveSection] = useState("home");
@@ -108,7 +110,11 @@ function App() {
       <SectionDivider />
       <About />
       <SectionDivider />
+      <Technologies />
+      <SectionDivider />
       <Skills />
+      <SectionDivider />
+      <Tools />
       <SectionDivider />
       <Projects />
       <SectionDivider />

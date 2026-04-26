@@ -1,69 +1,64 @@
 export const navItems = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
+  { id: "technologies", label: "Technologies" },
   { id: "skills", label: "Skills" },
   { id: "projects", label: "Projects" },
   { id: "contact", label: "Contact" },
 ];
 
-export const skillGroups = [
-  {
-    title: "Frontend",
-    items: ["HTML5", "CSS3", "JavaScript", "React"],
-    icon: "⚡",
-  },
-  {
-    title: "Backend",
-    items: ["PHP", "SQL", "REST APIs", "Laravel"],
-    icon: "🛠",
-  },
-  {
-    title: "UI/UX",
-    items: ["Figma", "Design Systems", "Responsive Layouts"],
-    icon: "🎯",
-  },
-  {
-    title: "AI / Automation",
-    items: ["Prompt Engineering", "Workflow Automation", "LLM Integrations"],
-    icon: "🤖",
-  },
+export const previewSkills = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "PHP",
+  "MySQL",
 ];
 
 export const projects = [
   {
-    title: "Library App",
-    description:
-      "Interactive library interface for browsing, searching, and organizing books with a clean UI.",
-    stack: ["JavaScript", "HTML5", "CSS3"],
-  },
-  {
-    title: "Countries Catalogue",
-    description:
-      "Data-rich catalogue to explore countries with filtering, quick facts, and modern card layouts.",
-    stack: ["JavaScript", "REST API", "Responsive UI"],
-  },
-  {
     title: "Event Management System",
     description:
-      "End-to-end event planner for scheduling sessions, tracking participants, and managing logistics.",
-    stack: ["PHP", "SQL", "CRUD Architecture"],
+      "An event platform built with HTML, CSS, and PHP featuring login, register, and home pages, plus an admin dashboard to manage events and bookings.",
+    stack: ["PHP", "HTML", "CSS"],
+    image: "/event-management.png",
+    demoUrl: "https://example.com",
+    githubUrl: "https://github.com/mesbahimohammedyassirsolicode-star",
   },
   {
-    title: "Product Management App",
+    title: "Countries Explorer",
     description:
-      "Dashboard-driven product manager for adding, updating, and monitoring inventory in real time.",
-    stack: ["JavaScript", "State Management", "UI Components"],
+      "A responsive countries catalogue with filtering, API-driven details, and an intuitive card browsing experience.",
+    stack: ["JavaScript", "REST API", "Tailwind CSS"],
+    image: "/countries-explorer.png",
+    demoUrl: "https://example.com",
+    githubUrl: "https://github.com/mesbahimohammedyassirsolicode-star",
   },
   {
-    title: "ToDo List (PHP)",
+    title: "Library Reservation System",
     description:
-      "Task management backend app with persistent storage, validation, and maintainable logic layers.",
-    stack: ["PHP", "SQL", "Backend Logic"],
+      "A library web app where users can reserve books, search by title, and view the most expensive book, while only the admin can add new books.",
+    stack: ["JavaScript", "HTML", "CSS"],
+    image: "/library-project.png",
+    demoUrl: "https://example.com",
+    githubUrl: "https://github.com/mesbahimohammedyassirsolicode-star",
   },
   {
-    title: "ToDo List (JavaScript)",
+    title: "Mini Shop Invoice System",
     description:
-      "Fast and minimal productivity app with instant interactions and lightweight task organization.",
-    stack: ["JavaScript", "DOM API", "Local Storage"],
+      "A mini shop application built with PHP, CSS, and JSON where users can select products, manage basket quantities, and view their invoice.",
+    stack: ["PHP", "CSS", "JSON"],
+    image: "/mini-shop.png",
+    demoUrl: "https://example.com",
+    githubUrl: "https://github.com/mesbahimohammedyassirsolicode-star",
+  },
+  {
+    title: "IKI Management Simulation",
+    description:
+      "A pure vibe coding system management simulation for Group IKI, built with Laravel and React, including an admin dashboard with parent, student, and formateurs management.",
+    stack: ["Laravel", "React", "System Management"],
+    image: "/iki-management.png",
+    demoUrl: "https://example.com",
+    githubUrl: "https://github.com/mesbahimohammedyassirsolicode-star",
   },
 ];

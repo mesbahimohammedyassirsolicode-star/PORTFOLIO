@@ -9,7 +9,7 @@ export default function SectionDivider() {
       viewport={{ once: true, amount: 0.9 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="mx-auto h-px w-full max-w-5xl bg-gradient-to-r from-transparent via-slate-400/35 to-transparent" />
+      <div className="mx-auto h-px w-full max-w-5xl bg-gradient-to-r from-transparent via-white/20 to-transparent" />
     </motion.div>
   );
 }
