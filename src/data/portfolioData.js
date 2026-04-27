@@ -20,7 +20,7 @@ export const projects = [
   {
     title: "Event Management System",
     description:
-      "An event platform built with HTML, CSS, and PHP featuring login, register, and home pages, plus an admin dashboard to manage events and bookings.",
+      "An event platform built with HTML5, CSS3, and PHP featuring login, register, and home pages, plus an admin dashboard to manage events and bookings.",
     stack: ["PHP", "HTML", "CSS"],
     image: "/event-management.png",
     imageWebp: "/event-management.webp",
