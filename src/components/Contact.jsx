@@ -1,13 +1,14 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, BriefcaseBusiness, GitBranch, Send } from "lucide-react";
-import emailjs from "@emailjs/browser";
 import SectionTitle from "./SectionTitle";
 import Button from "./ui/Button";
 import GlassCard from "./ui/GlassCard";
 import SectionShell from "./ui/SectionShell";
+import useAnimationBudget from "../hooks/useAnimationBudget";
 
 export default function Contact() {
+  const { shouldLimitMotion } = useAnimationBudget();
   const emailJsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
   const emailJsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const emailJsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -121,6 +122,7 @@ export default function Contact() {
       if (!(formElement instanceof HTMLFormElement)) {
         throw new Error("Form reference unavailable");
       }
+      const { default: emailjs } = await import("@emailjs/browser");
       await emailjs.send(emailJsServiceId, emailJsTemplateId, sanitizedPayload, {
         publicKey: emailJsPublicKey,
       });
@@ -150,12 +152,12 @@ export default function Contact() {
       />
       <motion.div
         className="grid grid-cols-1 gap-5 lg:grid-cols-[1.1fr_0.9fr]"
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ staggerChildren: 0.1 }}
+        initial={shouldLimitMotion ? false : "hidden"}
+        whileInView={shouldLimitMotion ? undefined : "show"}
+        viewport={shouldLimitMotion ? undefined : { once: true, amount: 0.2 }}
+        transition={shouldLimitMotion ? undefined : { staggerChildren: 0.1 }}
       >
-        <GlassCard className="p-5 sm:p-7" variants={itemVariants}>
+        <GlassCard className="p-5 sm:p-7" variants={shouldLimitMotion ? undefined : itemVariants}>
           <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
             <div className="hidden" aria-hidden="true">
               <label htmlFor="website">Website</label>
@@ -252,7 +254,7 @@ export default function Contact() {
             </Button>
           </form>
         </GlassCard>
-        <GlassCard className="p-5 sm:p-6" variants={itemVariants}>
+        <GlassCard className="p-5 sm:p-6" variants={shouldLimitMotion ? undefined : itemVariants}>
           <h3 className="mt-0 mb-4 text-lg font-semibold text-white sm:text-xl">Contact Details</h3>
           <a
             href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"

@@ -1,17 +1,30 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { memo } from "react";
+import { motion } from "framer-motion";
+import useAnimationBudget from "../hooks/useAnimationBudget";
 
-export default function SectionDivider() {
-  const shouldReduceMotion = useReducedMotion();
+function SectionDivider() {
+  const { shouldLimitMotion } = useAnimationBudget();
+  const divider = (
+    <div className="section z-10 py-0">
+      <div className="mx-auto h-px w-full max-w-5xl bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+    </div>
+  );
+
+  if (shouldLimitMotion) {
+    return divider;
+  }
 
   return (
     <motion.div
       className="section z-10 py-0"
-      initial={shouldReduceMotion ? false : { opacity: 0, scaleX: 0.85 }}
-      whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scaleX: 1 }}
+      initial={{ opacity: 0, scaleX: 0.9 }}
+      whileInView={{ opacity: 1, scaleX: 1 }}
       viewport={{ once: true, amount: 0.9 }}
-      transition={shouldReduceMotion ? { duration: 0.2 } : { duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
     >
       <div className="mx-auto h-px w-full max-w-5xl bg-gradient-to-r from-transparent via-white/20 to-transparent" />
     </motion.div>
   );
 }
+
+export default memo(SectionDivider);

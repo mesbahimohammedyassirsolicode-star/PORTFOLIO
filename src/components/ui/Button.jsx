@@ -1,11 +1,13 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import useAnimationBudget from "../../hooks/useAnimationBudget";
+import { memo } from "react";
 
 const variantClasses = {
   primary: "btn-primary",
   secondary: "btn-ghost",
 };
 
-export default function Button({
+function Button({
   as: Component = "button",
   href,
   variant = "primary",
@@ -13,13 +15,21 @@ export default function Button({
   children,
   ...props
 }) {
-  const shouldReduceMotion = useReducedMotion();
+  const { shouldLimitMotion } = useAnimationBudget();
   const classes = `${variantClasses[variant] ?? variantClasses.primary} ${className}`.trim();
+
+  if (shouldLimitMotion) {
+    return (
+      <Component href={href} className={classes} {...props}>
+        {children}
+      </Component>
+    );
+  }
 
   return (
     <motion.div
-      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.02 }}
-      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+      whileHover={{ y: -1, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
     >
       <Component href={href} className={classes} {...props}>
         {children}
@@ -27,3 +37,5 @@ export default function Button({
     </motion.div>
   );
 }
+
+export default memo(Button);

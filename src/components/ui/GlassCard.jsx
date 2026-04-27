@@ -1,23 +1,43 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import useAnimationBudget from "../../hooks/useAnimationBudget";
+import { memo } from "react";
 
-export default function GlassCard({ className = "", children, ...props }) {
-  const shouldReduceMotion = useReducedMotion();
+function GlassCard({ className = "", children, ...props }) {
+  const { shouldLimitMotion } = useAnimationBudget();
+  const classes = `glass gradient-border ${className}`.trim();
+
+  if (shouldLimitMotion) {
+    const staticProps = { ...props };
+    delete staticProps.initial;
+    delete staticProps.animate;
+    delete staticProps.whileInView;
+    delete staticProps.whileHover;
+    delete staticProps.whileTap;
+    delete staticProps.variants;
+    delete staticProps.viewport;
+    delete staticProps.transition;
+    delete staticProps.style;
+
+    return (
+      <article className={classes} {...staticProps}>
+        {children}
+      </article>
+    );
+  }
 
   return (
     <motion.article
-      className={`glass gradient-border ${className}`.trim()}
-      whileHover={
-        shouldReduceMotion
-          ? undefined
-          : {
-              y: -6,
-              boxShadow: "0 22px 52px rgba(2, 6, 23, 0.56)",
-            }
-      }
-      transition={shouldReduceMotion ? undefined : { duration: 0.22, ease: "easeOut" }}
+      className={classes}
+      whileHover={{
+        y: -2,
+        scale: 1.004,
+      }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
       {...props}
     >
       {children}
     </motion.article>
   );
 }
+
+export default memo(GlassCard);

@@ -1,36 +1,36 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { memo, useCallback, useState } from "react";
 import { navItems } from "../data/portfolioData";
+import useAnimationBudget from "../hooks/useAnimationBudget";
 
-export default function Navbar({ activeSection }) {
+function Navbar({ activeSection, onSectionChange }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { shouldLimitMotion } = useAnimationBudget();
 
-  const handleScroll = (sectionId) => {
+  const handleScroll = useCallback((sectionId) => {
     const element = document.getElementById(sectionId);
     if (!element) {
       return;
     }
 
+    onSectionChange?.(sectionId);
     const y = element.getBoundingClientRect().top + window.scrollY - 84;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    window.scrollTo({ top: y, behavior: shouldLimitMotion ? "auto" : "smooth" });
     setIsMenuOpen(false);
-  };
+  }, [onSectionChange, shouldLimitMotion]);
 
   return (
     <header className="sticky top-0 z-40 py-2.5 sm:py-3.5">
-      <nav className="mx-auto flex w-[min(1120px,92vw)] items-center justify-between rounded-2xl border border-white/12 bg-slate-950/60 px-3 py-2.5 shadow-[0_14px_36px_rgba(2,6,23,0.4)] backdrop-blur-2xl sm:px-5 sm:py-3">
-        <motion.button
+      <nav className="mx-auto flex w-[min(1120px,92vw)] items-center justify-between rounded-2xl border border-white/12 bg-slate-950/88 px-3 py-2.5 shadow-[0_10px_26px_rgba(2,6,23,0.34)] supports-[backdrop-filter]:bg-slate-950/72 supports-[backdrop-filter]:backdrop-blur-md sm:px-5 sm:py-3">
+        <button
           className="cursor-pointer border-0 bg-transparent text-sm font-semibold tracking-[0.16em] text-white sm:text-base sm:tracking-[0.18em]"
           onClick={() => handleScroll("home")}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
         >
           MY<span className="brand-accent">M</span>
-        </motion.button>
+        </button>
 
         <div className="hidden flex-wrap gap-1 md:flex">
           {navItems.map((item) => (
-            <motion.button
+            <button
               key={item.id}
               className={`relative rounded-lg border border-transparent px-3.5 py-2 text-sm transition ${
                 activeSection === item.id
@@ -38,13 +38,10 @@ export default function Navbar({ activeSection }) {
                   : "text-slate-400 hover:bg-white/10 hover:text-white"
               }`}
               onClick={() => handleScroll(item.id)}
-              whileHover={{ y: -1 }}
-              whileTap={{ y: 0 }}
             >
               {activeSection === item.id ? (
-                <motion.span
+                <span
                   className="absolute inset-x-2 -bottom-[3px] h-[2px] rounded-full"
-                  layoutId="active-nav-indicator"
                   style={{
                     background:
                       "linear-gradient(90deg, var(--accent-from), var(--accent-mid), var(--accent-to))",
@@ -52,7 +49,7 @@ export default function Navbar({ activeSection }) {
                 />
               ) : null}
               {item.label}
-            </motion.button>
+            </button>
           ))}
         </div>
 
@@ -67,31 +64,25 @@ export default function Navbar({ activeSection }) {
         </button>
       </nav>
 
-      <AnimatePresence>
-        {isMenuOpen ? (
-          <motion.div
-            className="mx-auto mt-2 flex w-[min(1120px,92vw)] flex-col gap-1 rounded-2xl border border-white/12 bg-slate-950/92 p-2 shadow-xl backdrop-blur-2xl md:hidden"
-            initial={{ opacity: 0, y: -14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-          >
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                className={`rounded-lg px-3 py-2.5 text-left text-sm transition ${
-                  activeSection === item.id
-                    ? "nav-link-active"
-                    : "text-slate-300 hover:bg-white/10 hover:text-white"
-                }`}
-                onClick={() => handleScroll(item.id)}
-              >
-                {item.label}
-              </button>
-            ))}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      {isMenuOpen ? (
+        <div className="mx-auto mt-2 flex w-[min(1120px,92vw)] flex-col gap-1 rounded-2xl border border-white/12 bg-slate-950/95 p-2 shadow-xl supports-[backdrop-filter]:bg-slate-950/86 supports-[backdrop-filter]:backdrop-blur-md md:hidden">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              className={`rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                activeSection === item.id
+                  ? "nav-link-active"
+                  : "text-slate-300 hover:bg-white/10 hover:text-white"
+              }`}
+              onClick={() => handleScroll(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
     </header>
   );
 }
+
+export default memo(Navbar);

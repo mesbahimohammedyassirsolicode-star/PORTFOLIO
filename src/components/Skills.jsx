@@ -4,6 +4,7 @@ import SectionTitle from "./SectionTitle";
 import GlassCard from "./ui/GlassCard";
 import SectionShell from "./ui/SectionShell";
 import Button from "./ui/Button";
+import useAnimationBudget from "../hooks/useAnimationBudget";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 26 },
@@ -30,6 +31,8 @@ const softSkills = [
 ];
 
 export default function Skills() {
+  const { shouldLimitMotion } = useAnimationBudget();
+
   return (
     <SectionShell id="skills" amount={0.25}>
       <SectionTitle
@@ -40,10 +43,10 @@ export default function Skills() {
 
       <motion.div
         className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4"
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={{
+        initial={shouldLimitMotion ? false : "hidden"}
+        whileInView={shouldLimitMotion ? undefined : "show"}
+        viewport={shouldLimitMotion ? undefined : { once: true, amount: 0.2 }}
+        variants={shouldLimitMotion ? undefined : {
           hidden: {},
           show: { transition: { staggerChildren: 0.09 } },
         }}
@@ -52,11 +55,7 @@ export default function Skills() {
           <GlassCard
             key={skill.title}
             className="group relative overflow-hidden p-4 text-center sm:p-5 md:p-6"
-            variants={cardVariants}
-            whileHover={{
-              scale: 1.02,
-              y: -5,
-            }}
+            variants={shouldLimitMotion ? undefined : cardVariants}
           >
             <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-violet-400/10 blur-2xl transition group-hover:bg-violet-400/20" />
             <div className="relative">
@@ -76,10 +75,10 @@ export default function Skills() {
       </motion.div>
       <motion.div
         className="mt-8 flex justify-center"
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.45 }}
+        initial={shouldLimitMotion ? false : { opacity: 0, y: 14 }}
+        whileInView={shouldLimitMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={shouldLimitMotion ? undefined : { once: true, amount: 0.4 }}
+        transition={shouldLimitMotion ? undefined : { duration: 0.45 }}
       >
         <Button as="a" href="#tools" variant="secondary" className="gap-2">
           View Tools <ArrowRight size={16} />

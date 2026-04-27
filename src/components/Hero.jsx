@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import Button from "./ui/Button";
+import useAnimationBudget from "../hooks/useAnimationBudget";
 
 const container = {
   hidden: { opacity: 0 },
@@ -22,6 +23,8 @@ const item = {
 };
 
 export default function Hero() {
+  const { shouldLimitMotion } = useAnimationBudget();
+
   return (
     <section id="home" className="relative flex min-h-screen items-center overflow-hidden pt-20 pb-10 sm:pt-24 sm:pb-12 md:pt-30 md:pb-16">
       <div className="section-glow -top-10 -left-12" />
@@ -29,36 +32,36 @@ export default function Hero() {
 
       <div className="section grid items-center gap-10 sm:gap-12 lg:grid-cols-[1.1fr_0.9fr]">
         <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
+          variants={shouldLimitMotion ? undefined : container}
+          initial={shouldLimitMotion ? false : "hidden"}
+          animate={shouldLimitMotion ? undefined : "show"}
           className="relative z-10 max-w-2xl"
         >
-          <motion.p variants={item} className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-[11px] tracking-[0.2em] text-slate-300 sm:px-4 sm:text-xs sm:tracking-[0.24em]">
+          <motion.p variants={shouldLimitMotion ? undefined : item} className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-[11px] tracking-[0.2em] text-slate-300 sm:px-4 sm:text-xs sm:tracking-[0.24em]">
             AVAILABLE FOR INTERNSHIP
           </motion.p>
 
           <motion.h1
-            variants={item}
+            variants={shouldLimitMotion ? undefined : item}
             className="mt-5 text-3xl font-semibold leading-[1.05] text-white sm:text-5xl md:text-6xl"
           >
             Mohammed <span className="hero-name">Yassir Mesbahi</span>
           </motion.h1>
 
-          <motion.p variants={item} className="mt-4 text-sm text-slate-300 sm:mt-6 sm:text-lg md:text-xl">
+          <motion.p variants={shouldLimitMotion ? undefined : item} className="mt-4 text-sm text-slate-300 sm:mt-6 sm:text-lg md:text-xl">
             Full Stack Developer & Gestion Informatique
           </motion.p>
 
-          <motion.p variants={item} className="mt-2.5 max-w-xl text-sm leading-6 text-slate-400 sm:mt-3 sm:text-base md:text-lg">
+          <motion.p variants={shouldLimitMotion ? undefined : item} className="mt-2.5 max-w-xl text-sm leading-6 text-slate-400 sm:mt-3 sm:text-base md:text-lg">
             I build modern web applications with clean code and smart business logic.
           </motion.p>
 
           <motion.div
-            variants={item}
+            variants={shouldLimitMotion ? undefined : item}
             className="mt-6 flex flex-wrap gap-2 sm:mt-8 sm:gap-3"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut", delay: 0.22 }}
+            initial={shouldLimitMotion ? false : { opacity: 0, y: 18 }}
+            animate={shouldLimitMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={shouldLimitMotion ? undefined : { duration: 0.55, ease: "easeOut", delay: 0.22 }}
           >
             <Button as="a" href="#projects">
               View Projects
@@ -70,9 +73,9 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, ease: "easeOut", delay: 0.22 }}
+          initial={shouldLimitMotion ? false : { opacity: 0, y: 30 }}
+          animate={shouldLimitMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={shouldLimitMotion ? undefined : { duration: 0.75, ease: "easeOut", delay: 0.22 }}
           className="relative z-10 mx-auto w-full max-w-[420px]"
         >
           <div className="glass gradient-border p-5 sm:p-6 md:p-7">

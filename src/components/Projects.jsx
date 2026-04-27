@@ -1,10 +1,12 @@
-import { motion } from "framer-motion";
+import { memo } from "react";
 import { projects } from "../data/portfolioData";
 import SectionTitle from "./SectionTitle";
 import GlassCard from "./ui/GlassCard";
 import SectionShell from "./ui/SectionShell";
+import useAnimationBudget from "../hooks/useAnimationBudget";
 
-export default function Projects() {
+function Projects() {
+  const { shouldLimitMotion } = useAnimationBudget();
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.96, y: 22 },
     show: {
@@ -22,32 +24,32 @@ export default function Projects() {
         title="Featured Projects"
         subtitle="A selection of projects focused on usability, clean architecture, and measurable value."
       />
-      <motion.div
-        className="grid grid-cols-1 gap-4 sm:gap-5 xl:grid-cols-3"
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ staggerChildren: 0.1 }}
-      >
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 xl:grid-cols-3">
         {projects.map((project, index) => (
           <GlassCard
             key={project.title}
             className="group overflow-hidden p-0"
-            variants={cardVariants}
-            transition={{ duration: 0.5, delay: index * 0.04 }}
+            initial={shouldLimitMotion ? undefined : "hidden"}
+            whileInView={shouldLimitMotion ? undefined : "show"}
+            viewport={shouldLimitMotion ? undefined : { once: true, amount: 0.2 }}
+            variants={shouldLimitMotion ? undefined : cardVariants}
+            transition={shouldLimitMotion ? undefined : { duration: 0.5, delay: index * 0.04 }}
           >
             <div className="relative h-48 overflow-hidden">
-              <img
-                src={project.image}
-                alt={`${project.title} preview`}
-                width="640"
-                height="360"
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                loading="lazy"
-                decoding="async"
-                fetchPriority={index === 0 ? "high" : "low"}
-                sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 30vw"
-              />
+              <picture>
+                <source srcSet={project.imageWebp} type="image/webp" />
+                <img
+                  src={project.image}
+                  alt={`${project.title} preview`}
+                  width="640"
+                  height="360"
+                  className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  fetchPriority={index === 0 ? "high" : "low"}
+                  sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 30vw"
+                />
+              </picture>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
             </div>
             <div className="p-5 sm:p-6">
@@ -84,7 +86,9 @@ export default function Projects() {
             </div>
           </GlassCard>
         ))}
-      </motion.div>
+      </div>
     </SectionShell>
   );
 }
+
+export default memo(Projects);

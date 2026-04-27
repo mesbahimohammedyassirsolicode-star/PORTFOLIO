@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion, useScroll } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -9,6 +8,8 @@ import Tools from "./components/Tools";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import SectionDivider from "./components/SectionDivider";
+import useAnimationBudget from "./hooks/useAnimationBudget";
+import useSmoothWheelScroll from "./hooks/useSmoothWheelScroll";
 
 function App() {
   const sectionIds = useMemo(
@@ -16,7 +17,8 @@ function App() {
     []
   );
   const [activeSection, setActiveSection] = useState("home");
-  const { scrollYProgress } = useScroll();
+  const { shouldLimitMotion } = useAnimationBudget();
+  useSmoothWheelScroll({ enabled: !shouldLimitMotion });
 
   useEffect(() => {
     const sections = sectionIds
@@ -26,59 +28,55 @@ function App() {
       return undefined;
     }
 
-    let ticking = false;
-
-    const updateActiveSection = () => {
+    const getCurrentSection = () => {
       const headerElement = document.querySelector("header");
-      const measuredHeaderHeight =
-        headerElement instanceof HTMLElement ? headerElement.offsetHeight : 84;
-      const viewportRatio = window.innerWidth < 768 ? 0.27 : 0.35;
-      const viewportOffset = window.innerHeight * viewportRatio;
-      const scrollMarker = window.scrollY + measuredHeaderHeight + viewportOffset;
+      const headerHeight = headerElement instanceof HTMLElement ? headerElement.offsetHeight : 84;
+      const viewportAnchor = window.scrollY + headerHeight + 100;
 
-      const matchedSection = [...sections]
-        .reverse()
-        .find((section) => section.offsetTop <= scrollMarker);
-
-      if (matchedSection) {
-        setActiveSection((previousSection) =>
-          previousSection === matchedSection.id ? previousSection : matchedSection.id
-        );
+      let currentSectionId = sections[0].id;
+      for (const section of sections) {
+        if (viewportAnchor >= section.offsetTop) {
+          currentSectionId = section.id;
+        } else {
+          break;
+        }
       }
+
+      return currentSectionId;
     };
 
+    let rafId = 0;
     const onScroll = () => {
-      if (ticking) {
-        return;
-      }
-
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        updateActiveSection();
-        ticking = false;
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const currentSectionId = getCurrentSection();
+        setActiveSection((previousSection) =>
+          previousSection === currentSectionId ? previousSection : currentSectionId
+        );
       });
     };
 
-    updateActiveSection();
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", updateActiveSection);
+    window.addEventListener("resize", onScroll);
 
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", updateActiveSection);
+      window.removeEventListener("resize", onScroll);
     };
   }, [sectionIds]);
 
   return (
     <div className="relative min-h-screen overflow-x-clip">
-      <motion.div
-        className="progress-bar fixed top-0 left-0 z-50 h-1 w-full origin-left"
-        style={{ scaleX: scrollYProgress }}
-      />
-      <div className="pointer-events-none fixed -right-24 -top-28 z-0 hidden h-80 w-80 rounded-full bg-violet-600/30 blur-[90px] sm:block" />
-      <div className="pointer-events-none fixed -bottom-24 -left-20 z-0 hidden h-72 w-72 rounded-full bg-indigo-500/20 blur-[90px] sm:block" />
-      <div className="bg-grid" />
-      <Navbar activeSection={activeSection} sectionIds={sectionIds} />
+      {shouldLimitMotion ? null : (
+        <>
+          <div className="pointer-events-none fixed -right-24 -top-28 z-0 hidden h-80 w-80 rounded-full bg-violet-600/18 blur-3xl lg:block" />
+          <div className="pointer-events-none fixed -bottom-24 -left-20 z-0 hidden h-72 w-72 rounded-full bg-indigo-500/14 blur-3xl lg:block" />
+          <div className="bg-grid" />
+        </>
+      )}
+      <Navbar activeSection={activeSection} onSectionChange={setActiveSection} />
       <Hero />
       <SectionDivider />
       <About />
