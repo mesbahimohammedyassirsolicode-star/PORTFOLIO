@@ -17,7 +17,11 @@ export default function SectionTitle({ eyebrow, title, subtitle }) {
       <h2 className="heading-balance max-w-[22ch] text-3xl font-semibold tracking-tight text-white sm:text-4xl md:text-5xl">
         {title}
       </h2>
-      {subtitle ? <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400 sm:text-base md:text-lg">{subtitle}</p> : null}
+      {subtitle ? (
+        <p className="mt-2.5 max-w-3xl text-sm leading-6 text-slate-400 sm:mt-3 sm:text-base sm:leading-7 md:text-lg">
+          {subtitle}
+        </p>
+      ) : null}
     </motion.div>
   );
 }

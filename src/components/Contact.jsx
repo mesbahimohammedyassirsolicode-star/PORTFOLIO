@@ -256,7 +256,7 @@ export default function Contact() {
           <h3 className="mt-0 mb-4 text-lg font-semibold text-white sm:text-xl">Contact Details</h3>
           <a
             href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"
-            className="my-2 flex flex-wrap items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
+            className="my-2 flex flex-wrap items-center gap-2 break-all text-sm text-slate-300 transition hover:text-white sm:text-base"
           >
             <Mail size={16} />
             mesbahi.mohammedyassir.solicode@gmail.com

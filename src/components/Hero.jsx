@@ -45,17 +45,17 @@ export default function Hero() {
             Mohammed <span className="hero-name">Yassir Mesbahi</span>
           </motion.h1>
 
-          <motion.p variants={item} className="mt-5 text-base text-slate-300 sm:mt-6 sm:text-lg md:text-xl">
+          <motion.p variants={item} className="mt-4 text-sm text-slate-300 sm:mt-6 sm:text-lg md:text-xl">
             Full Stack Developer & Gestion Informatique
           </motion.p>
 
-          <motion.p variants={item} className="mt-3 max-w-xl text-sm text-slate-400 sm:text-base md:text-lg">
+          <motion.p variants={item} className="mt-2.5 max-w-xl text-sm leading-6 text-slate-400 sm:mt-3 sm:text-base md:text-lg">
             I build modern web applications with clean code and smart business logic.
           </motion.p>
 
           <motion.div
             variants={item}
-            className="mt-7 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3"
+            className="mt-6 flex flex-wrap gap-2 sm:mt-8 sm:gap-3"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeOut", delay: 0.22 }}

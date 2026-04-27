@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion, useReducedMotion, useScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -16,30 +16,57 @@ function App() {
     []
   );
   const [activeSection, setActiveSection] = useState("home");
-  const shouldReduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     const sections = sectionIds
       .map((id) => document.getElementById(id))
-      .filter(Boolean);
+      .filter((section) => section instanceof HTMLElement);
+    if (!sections.length) {
+      return undefined;
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      {
-        threshold: 0.35,
-        rootMargin: "-20% 0px -35% 0px",
+    let ticking = false;
+
+    const updateActiveSection = () => {
+      const headerElement = document.querySelector("header");
+      const measuredHeaderHeight =
+        headerElement instanceof HTMLElement ? headerElement.offsetHeight : 84;
+      const viewportRatio = window.innerWidth < 768 ? 0.27 : 0.35;
+      const viewportOffset = window.innerHeight * viewportRatio;
+      const scrollMarker = window.scrollY + measuredHeaderHeight + viewportOffset;
+
+      const matchedSection = [...sections]
+        .reverse()
+        .find((section) => section.offsetTop <= scrollMarker);
+
+      if (matchedSection) {
+        setActiveSection((previousSection) =>
+          previousSection === matchedSection.id ? previousSection : matchedSection.id
+        );
       }
-    );
+    };
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    const onScroll = () => {
+      if (ticking) {
+        return;
+      }
+
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        updateActiveSection();
+        ticking = false;
+      });
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", updateActiveSection);
+    };
   }, [sectionIds]);
 
   return (
