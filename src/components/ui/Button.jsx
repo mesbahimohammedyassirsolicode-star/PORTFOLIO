@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const variantClasses = {
   primary: "btn-primary",
@@ -13,10 +13,14 @@ export default function Button({
   children,
   ...props
 }) {
+  const shouldReduceMotion = useReducedMotion();
   const classes = `${variantClasses[variant] ?? variantClasses.primary} ${className}`.trim();
 
   return (
-    <motion.div whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+    <motion.div
+      whileHover={shouldReduceMotion ? undefined : { y: -2, scale: 1.02 }}
+      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
+    >
       <Component href={href} className={classes} {...props}>
         {children}
       </Component>

@@ -29,7 +29,7 @@ export default function Technologies() {
       />
 
       <motion.div
-        className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+        className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-4"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
@@ -42,7 +42,7 @@ export default function Technologies() {
           return (
             <GlassCard
               key={skill}
-              className="group relative overflow-hidden p-5 text-center md:p-6"
+              className="group relative overflow-hidden p-4 text-center sm:p-5 md:p-6"
               variants={cardVariants}
               whileHover={{
                 scale: 1.04,
@@ -57,12 +57,15 @@ export default function Technologies() {
                   <img
                     src={logoMap[skill]}
                     alt={`${skill} logo`}
+                    width="28"
+                    height="28"
                     className="h-7 w-7 object-contain"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
 
-                <h3 className="mt-3 text-base font-semibold text-white">{skill}</h3>
+                <h3 className="mt-3 text-sm font-semibold text-white sm:text-base">{skill}</h3>
               </div>
             </GlassCard>
           );

@@ -17,10 +17,10 @@ export default function Navbar({ activeSection }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 py-4">
-      <nav className="mx-auto flex w-[min(1160px,92vw)] items-center justify-between rounded-2xl border border-white/15 bg-slate-950/55 px-4 py-3 shadow-[0_16px_40px_rgba(2,6,23,0.45)] backdrop-blur-2xl sm:px-5">
+    <header className="sticky top-0 z-40 py-3 sm:py-4">
+      <nav className="mx-auto flex w-[min(1160px,92vw)] items-center justify-between rounded-2xl border border-white/15 bg-slate-950/55 px-3 py-2.5 shadow-[0_16px_40px_rgba(2,6,23,0.45)] backdrop-blur-2xl sm:px-5 sm:py-3">
         <motion.button
-          className="cursor-pointer border-0 bg-transparent text-base font-semibold tracking-[0.18em] text-white"
+          className="cursor-pointer border-0 bg-transparent text-sm font-semibold tracking-[0.16em] text-white sm:text-base sm:tracking-[0.18em]"
           onClick={() => handleScroll("home")}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
@@ -58,7 +58,7 @@ export default function Navbar({ activeSection }) {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-white/20 text-slate-200 transition hover:border-white/40 hover:bg-white/10 md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/20 text-slate-200 transition hover:border-white/40 hover:bg-white/10 md:hidden"
           onClick={() => setIsMenuOpen((previousValue) => !previousValue)}
           aria-label="Toggle menu"
           aria-expanded={isMenuOpen}
@@ -79,7 +79,7 @@ export default function Navbar({ activeSection }) {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                className={`rounded-lg px-3 py-2 text-left text-sm transition ${
+                className={`rounded-lg px-3 py-2.5 text-left text-sm transition ${
                   activeSection === item.id
                     ? "nav-link-active"
                     : "text-slate-300 hover:bg-white/10 hover:text-white"

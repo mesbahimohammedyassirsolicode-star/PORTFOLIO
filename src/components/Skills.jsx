@@ -39,7 +39,7 @@ export default function Skills() {
       />
 
       <motion.div
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
@@ -51,7 +51,7 @@ export default function Skills() {
         {softSkills.map((skill) => (
           <GlassCard
             key={skill.title}
-            className="group relative overflow-hidden p-5 text-center md:p-6"
+            className="group relative overflow-hidden p-4 text-center sm:p-5 md:p-6"
             variants={cardVariants}
             whileHover={{
               scale: 1.04,
@@ -69,7 +69,7 @@ export default function Skills() {
                   .slice(0, 2)
                   .toUpperCase()}
               </div>
-              <h3 className="mt-3 text-base font-semibold text-white">{skill.title}</h3>
+              <h3 className="mt-3 text-sm font-semibold text-white sm:text-base">{skill.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-300">{skill.description}</p>
             </div>
           </GlassCard>

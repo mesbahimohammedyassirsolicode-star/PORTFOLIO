@@ -23,7 +23,7 @@ export default function Projects() {
         subtitle="A selection of projects focused on usability, clean architecture, and measurable value."
       />
       <motion.div
-        className="grid grid-cols-1 gap-5 xl:grid-cols-3"
+        className="grid grid-cols-1 gap-4 sm:gap-5 xl:grid-cols-3"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
@@ -40,14 +40,19 @@ export default function Projects() {
               <img
                 src={project.image}
                 alt={`${project.title} preview`}
+                width="640"
+                height="360"
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 30vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
             </div>
-            <div className="p-6">
-              <h3 className="mb-2 text-xl font-semibold text-white">{project.title}</h3>
-              <p className="text-sm leading-7 text-slate-300">{project.description}</p>
+            <div className="p-5 sm:p-6">
+              <h3 className="mb-2 text-lg font-semibold text-white sm:text-xl">{project.title}</h3>
+              <p className="text-sm leading-6 text-slate-300 sm:leading-7">{project.description}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {project.stack.map((tech) => (
                   <span
@@ -58,7 +63,7 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
-              <div className="mt-5 flex items-center gap-2">
+              <div className="mt-5 flex flex-wrap items-center gap-2">
                 <a
                   href={project.demoUrl}
                   target="_blank"

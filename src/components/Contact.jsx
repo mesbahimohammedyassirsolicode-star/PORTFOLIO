@@ -155,7 +155,7 @@ export default function Contact() {
         viewport={{ once: true, amount: 0.2 }}
         transition={{ staggerChildren: 0.1 }}
       >
-        <GlassCard className="p-6 sm:p-7" variants={itemVariants}>
+        <GlassCard className="p-5 sm:p-7" variants={itemVariants}>
           <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
             <div className="hidden" aria-hidden="true">
               <label htmlFor="website">Website</label>
@@ -246,17 +246,17 @@ export default function Contact() {
               </p>
             ) : null}
 
-            <Button type="submit" className="w-fit gap-2" disabled={isSubmitting}>
+            <Button type="submit" className="w-full gap-2 sm:w-fit" disabled={isSubmitting}>
               <Send size={16} />
               {isSubmitting ? "Sending..." : "Send Message"}
             </Button>
           </form>
         </GlassCard>
-        <GlassCard className="p-6" variants={itemVariants}>
-          <h3 className="mt-0 mb-4 text-xl font-semibold text-white">Contact Details</h3>
+        <GlassCard className="p-5 sm:p-6" variants={itemVariants}>
+          <h3 className="mt-0 mb-4 text-lg font-semibold text-white sm:text-xl">Contact Details</h3>
           <a
             href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"
-            className="my-2 flex items-center gap-2 text-slate-300 transition hover:text-white"
+            className="my-2 flex flex-wrap items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
           >
             <Mail size={16} />
             mesbahi.mohammedyassir.solicode@gmail.com
@@ -265,7 +265,7 @@ export default function Contact() {
             href="https://github.com/mesbahimohammedyassirsolicode-star"
             target="_blank"
             rel="noreferrer"
-            className="my-2 flex items-center gap-2 text-slate-300 transition hover:text-white"
+            className="my-2 flex items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
           >
             <GitBranch size={16} />
             GitHub
@@ -274,7 +274,7 @@ export default function Contact() {
             href="https://www.linkedin.com/in/mohammed-yassir-mesbahi-600691329/"
             target="_blank"
             rel="noreferrer"
-            className="my-2 flex items-center gap-2 text-slate-300 transition hover:text-white"
+            className="my-2 flex items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
           >
             <BriefcaseBusiness size={16} />
             LinkedIn

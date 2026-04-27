@@ -29,7 +29,7 @@ export const projects = [
     title: "Countries Explorer",
     description:
       "A responsive countries catalogue with filtering, API-driven details, and an intuitive card browsing experience.",
-    stack: ["JavaScript", "REST API", "Tailwind CSS"],
+    stack: ["JavaScript", "REST API", " CSS"],
     image: "/countries-explorer.png",
     demoUrl: "https://example.com",
     githubUrl: "https://github.com/mesbahimohammedyassirsolicode-star",

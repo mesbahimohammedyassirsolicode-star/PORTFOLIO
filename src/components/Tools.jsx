@@ -61,7 +61,7 @@ export default function Tools() {
       />
 
       <motion.div
-        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.2 }}
@@ -74,24 +74,27 @@ export default function Tools() {
           return (
             <GlassCard
               key={tool.name}
-              className="group relative overflow-hidden p-5 md:p-6"
+              className="group relative overflow-hidden p-4 sm:p-5 md:p-6"
               variants={cardVariants}
               whileHover={{ scale: 1.02, y: -8, boxShadow: "0 34px 74px rgba(2, 6, 23, 0.65)" }}
             >
               <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-violet-400/10 blur-2xl transition group-hover:bg-violet-400/20" />
 
               <div className="relative flex items-start gap-4">
-                <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/20 bg-white/10 p-2">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/20 bg-white/10 p-2 sm:h-11 sm:w-11">
                   <img
                     src={tool.logo}
                     alt={`${tool.name} logo`}
+                    width="24"
+                    height="24"
                     className="h-6 w-6 object-contain"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
 
                 <div className="min-w-0">
-                  <h3 className="mt-1 text-lg font-semibold text-white">{tool.name}</h3>
+                  <h3 className="mt-1 text-base font-semibold text-white sm:text-lg">{tool.name}</h3>
                   <p className="mt-2 line-clamp-1 text-sm leading-relaxed text-slate-300 transition-all duration-300 group-hover:line-clamp-none group-hover:text-slate-200">
                     {tool.description}
                   </p>

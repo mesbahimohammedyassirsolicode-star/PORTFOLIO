@@ -63,7 +63,7 @@
   }
 
   .section {
-    @apply relative z-10 mx-auto w-[min(1160px,92vw)] py-16 md:py-22;
+    @apply relative z-10 mx-auto w-[min(1160px,92vw)] py-12 sm:py-14 md:py-22;
   }
 
   .glass {
@@ -98,7 +98,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl border border-transparent px-6 py-3 text-sm font-semibold text-white transition duration-300;
+    @apply inline-flex min-h-11 items-center justify-center rounded-xl border border-transparent px-4 py-2.5 text-sm font-semibold text-white transition duration-300 sm:px-6 sm:py-3;
     background-image: linear-gradient(120deg, var(--accent-from), var(--accent-to));
     box-shadow: 0 14px 30px var(--accent-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
@@ -108,7 +108,7 @@
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-xl border border-white/25 bg-white/[0.03] px-6 py-3 text-sm font-semibold text-slate-100 transition duration-300 hover:border-white/45 hover:bg-white/[0.09];
+    @apply inline-flex min-h-11 items-center justify-center rounded-xl border border-white/25 bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-slate-100 transition duration-300 hover:border-white/45 hover:bg-white/[0.09] sm:px-6 sm:py-3;
   }
 
   .progress-bar {
@@ -169,7 +169,7 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.22;
+    opacity: 0.18;
     background-size: 42px 42px;
     background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
@@ -185,5 +185,28 @@
     filter: blur(24px);
     pointer-events: none;
     z-index: 0;
+  }
+
+  @media (max-width: 640px) {
+    .section-glow {
+      width: 250px;
+      height: 250px;
+      filter: blur(20px);
+      opacity: 0.75;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
