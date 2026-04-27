@@ -10,11 +10,11 @@ export default function GlassCard({ className = "", children, ...props }) {
         shouldReduceMotion
           ? undefined
           : {
-              y: -8,
-              boxShadow: "0 30px 70px rgba(2, 6, 23, 0.62)",
+              y: -6,
+              boxShadow: "0 22px 52px rgba(2, 6, 23, 0.56)",
             }
       }
-      transition={shouldReduceMotion ? undefined : { duration: 0.25, ease: "easeOut" }}
+      transition={shouldReduceMotion ? undefined : { duration: 0.22, ease: "easeOut" }}
       {...props}
     >
       {children}

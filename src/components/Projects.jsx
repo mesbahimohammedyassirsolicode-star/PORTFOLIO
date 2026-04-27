@@ -36,23 +36,23 @@ export default function Projects() {
             variants={cardVariants}
             transition={{ duration: 0.5, delay: index * 0.04 }}
           >
-            <div className="relative h-44 overflow-hidden">
+            <div className="relative h-48 overflow-hidden">
               <img
                 src={project.image}
                 alt={`${project.title} preview`}
                 width="640"
                 height="360"
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
                 decoding="async"
-                fetchPriority="low"
+                fetchPriority={index === 0 ? "high" : "low"}
                 sizes="(max-width: 640px) 92vw, (max-width: 1280px) 45vw, 30vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/20 to-transparent" />
             </div>
             <div className="p-5 sm:p-6">
               <h3 className="mb-2 text-lg font-semibold text-white sm:text-xl">{project.title}</h3>
-              <p className="text-sm leading-6 text-slate-300 sm:leading-7">{project.description}</p>
+              <p className="line-clamp-3 text-sm leading-6 text-slate-300 sm:leading-7">{project.description}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {project.stack.map((tech) => (
                   <span

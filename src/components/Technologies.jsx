@@ -45,9 +45,8 @@ export default function Technologies() {
               className="group relative overflow-hidden p-4 text-center sm:p-5 md:p-6"
               variants={cardVariants}
               whileHover={{
-                scale: 1.04,
-                y: -8,
-                boxShadow: "0 0 0 1px rgba(167, 139, 250, 0.55), 0 30px 68px rgba(2, 6, 23, 0.7)",
+                scale: 1.02,
+                y: -5,
               }}
             >
               <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-violet-400/10 blur-2xl transition group-hover:bg-violet-400/20" />

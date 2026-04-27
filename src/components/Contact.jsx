@@ -181,7 +181,7 @@ export default function Contact() {
                 value={formState.name}
                 onChange={handleInputChange}
                 required
-                className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-violet-400 focus:outline-none"
+                className="field-input"
                 placeholder="Your full name"
               />
             </div>
@@ -197,7 +197,7 @@ export default function Contact() {
                 value={formState.email}
                 onChange={handleInputChange}
                 required
-                className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-violet-400 focus:outline-none"
+                className="field-input"
                 placeholder="client@example.com"
               />
             </div>
@@ -213,7 +213,7 @@ export default function Contact() {
                 value={formState.subject}
                 onChange={handleInputChange}
                 required
-                className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-violet-400 focus:outline-none"
+                className="field-input"
                 placeholder="Project inquiry"
               />
             </div>
@@ -229,7 +229,7 @@ export default function Contact() {
                 value={formState.message}
                 onChange={handleInputChange}
                 required
-                className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-violet-400 focus:outline-none"
+                className="field-input"
                 placeholder="Tell me about your project and goals..."
               />
             </div>

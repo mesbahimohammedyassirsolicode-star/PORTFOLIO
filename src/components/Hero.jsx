@@ -23,7 +23,7 @@ const item = {
 
 export default function Hero() {
   return (
-    <section id="home" className="relative flex min-h-screen items-center overflow-hidden pt-20 pb-12 sm:pt-24 sm:pb-16 md:pt-32 md:pb-22">
+    <section id="home" className="relative flex min-h-screen items-center overflow-hidden pt-20 pb-10 sm:pt-24 sm:pb-12 md:pt-30 md:pb-16">
       <div className="section-glow -top-10 -left-12" />
       <div className="section-glow right-0 bottom-0" />
 
@@ -40,7 +40,7 @@ export default function Hero() {
 
           <motion.h1
             variants={item}
-            className="mt-5 text-3xl font-semibold leading-[1.08] text-white sm:text-5xl sm:leading-[1.05] md:text-6xl"
+            className="mt-5 text-3xl font-semibold leading-[1.05] text-white sm:text-5xl md:text-6xl"
           >
             Mohammed <span className="hero-name">Yassir Mesbahi</span>
           </motion.h1>
@@ -49,7 +49,7 @@ export default function Hero() {
             Full Stack Developer & Gestion Informatique
           </motion.p>
 
-          <motion.p variants={item} className="mt-3 text-sm text-slate-400 sm:text-base md:text-lg">
+          <motion.p variants={item} className="mt-3 max-w-xl text-sm text-slate-400 sm:text-base md:text-lg">
             I build modern web applications with clean code and smart business logic.
           </motion.p>
 
@@ -83,14 +83,14 @@ export default function Hero() {
               {["Responsive React UI", "RESTful Backend Thinking", "Maintainable Code Architecture"].map((item) => (
                 <div
                   key={item}
-                  className="rounded-xl border border-white/12 bg-white/[0.03] px-4 py-3 text-xs text-slate-200 sm:text-sm"
+                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-slate-200 sm:text-sm"
                 >
                   {item}
                 </div>
               ))}
             </div>
 
-            <pre className="mt-5 overflow-x-auto rounded-xl border border-white/10 bg-slate-950/80 p-3 text-[11px] text-slate-300 sm:mt-6 sm:p-4 sm:text-xs">
+            <pre className="mt-5 overflow-x-auto rounded-xl border border-white/10 bg-slate-950/70 p-3 text-[11px] text-slate-300 sm:mt-6 sm:p-4 sm:text-xs">
 {`const developer = {
   role: "full stack developer",
   quality: "clean code",

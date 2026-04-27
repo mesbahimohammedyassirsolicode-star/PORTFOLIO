@@ -76,7 +76,7 @@ export default function Tools() {
               key={tool.name}
               className="group relative overflow-hidden p-4 sm:p-5 md:p-6"
               variants={cardVariants}
-              whileHover={{ scale: 1.02, y: -8, boxShadow: "0 34px 74px rgba(2, 6, 23, 0.65)" }}
+              whileHover={{ scale: 1.01, y: -5 }}
             >
               <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-violet-400/10 blur-2xl transition group-hover:bg-violet-400/20" />
 
