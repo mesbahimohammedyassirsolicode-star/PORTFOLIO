@@ -20,9 +20,9 @@ function Navbar({ activeSection, onSectionChange }) {
 
   return (
     <header className="sticky top-0 z-40 py-2.5 sm:py-3.5">
-      <nav className="mx-auto flex w-[min(1120px,92vw)] items-center justify-between rounded-2xl border border-white/12 bg-slate-950/88 px-3 py-2.5 shadow-[0_10px_26px_rgba(2,6,23,0.34)] supports-[backdrop-filter]:bg-slate-950/72 supports-[backdrop-filter]:backdrop-blur-md sm:px-5 sm:py-3">
+      <nav className={`mx-auto flex w-[min(1120px,92vw)] items-center justify-between rounded-2xl border border-white/12 bg-slate-950/88 px-3 py-2.5 shadow-[0_10px_26px_rgba(2,6,23,0.34)] sm:px-5 sm:py-3 ${shouldLimitMotion ? "" : "supports-[backdrop-filter]:bg-slate-950/72 supports-[backdrop-filter]:backdrop-blur-md"}`}>
         <button
-          className="cursor-pointer border-0 bg-transparent text-sm font-semibold tracking-[0.16em] text-white sm:text-base sm:tracking-[0.18em]"
+          className="cursor-pointer rounded-lg border border-transparent bg-transparent px-2 py-1 text-sm font-semibold tracking-[0.16em] text-white transition sm:text-base sm:tracking-[0.18em] nav-link-hover"
           onClick={() => handleScroll("home")}
         >
           MY<span className="brand-accent">M</span>
@@ -32,7 +32,7 @@ function Navbar({ activeSection, onSectionChange }) {
           {navItems.map((item) => (
             <button
               key={item.id}
-              className={`relative rounded-lg border border-transparent px-3.5 py-2 text-sm transition ${
+              className={`nav-link-hover relative rounded-lg border border-transparent px-3.5 py-2 text-sm transition ${
                 activeSection === item.id
                   ? "nav-link-active"
                   : "text-slate-400 hover:bg-white/10 hover:text-white"
@@ -65,11 +65,11 @@ function Navbar({ activeSection, onSectionChange }) {
       </nav>
 
       {isMenuOpen ? (
-        <div className="mx-auto mt-2 flex w-[min(1120px,92vw)] flex-col gap-1 rounded-2xl border border-white/12 bg-slate-950/95 p-2 shadow-xl supports-[backdrop-filter]:bg-slate-950/86 supports-[backdrop-filter]:backdrop-blur-md md:hidden">
+        <div className={`mx-auto mt-2 flex w-[min(1120px,92vw)] flex-col gap-1 rounded-2xl border border-white/12 bg-slate-950/95 p-2 shadow-xl md:hidden ${shouldLimitMotion ? "" : "supports-[backdrop-filter]:bg-slate-950/86 supports-[backdrop-filter]:backdrop-blur-md"}`}>
           {navItems.map((item) => (
             <button
               key={item.id}
-              className={`rounded-lg px-3 py-2.5 text-left text-sm transition ${
+              className={`nav-link-hover rounded-lg border border-transparent px-3 py-2.5 text-left text-sm transition ${
                 activeSection === item.id
                   ? "nav-link-active"
                   : "text-slate-300 hover:bg-white/10 hover:text-white"

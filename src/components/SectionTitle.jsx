@@ -1,9 +1,6 @@
 import { memo } from "react";
-import { motion } from "framer-motion";
-import useAnimationBudget from "../hooks/useAnimationBudget";
 
 function SectionTitle({ eyebrow, title, subtitle }) {
-  const { shouldLimitMotion } = useAnimationBudget();
   const content = (
     <>
       <span className="mb-3 inline-block rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] font-semibold tracking-[0.2em] text-slate-300 uppercase">
@@ -20,21 +17,7 @@ function SectionTitle({ eyebrow, title, subtitle }) {
     </>
   );
 
-  if (shouldLimitMotion) {
-    return <div className="mb-8 sm:mb-10">{content}</div>;
-  }
-
-  return (
-    <motion.div
-      className="mb-8 sm:mb-10"
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.4 }}
-    >
-      {content}
-    </motion.div>
-  );
+  return <div className="reveal-fade-up mb-8 sm:mb-10">{content}</div>;
 }
 
 export default memo(SectionTitle);

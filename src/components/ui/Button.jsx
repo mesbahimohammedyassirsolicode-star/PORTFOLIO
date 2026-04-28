@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-import useAnimationBudget from "../../hooks/useAnimationBudget";
 import { memo } from "react";
 
 const variantClasses = {
@@ -15,26 +13,12 @@ function Button({
   children,
   ...props
 }) {
-  const { shouldLimitMotion } = useAnimationBudget();
-  const classes = `${variantClasses[variant] ?? variantClasses.primary} ${className}`.trim();
-
-  if (shouldLimitMotion) {
-    return (
-      <Component href={href} className={classes} {...props}>
-        {children}
-      </Component>
-    );
-  }
+  const classes = `${variantClasses[variant] ?? variantClasses.primary} btn-interactive ${className}`.trim();
 
   return (
-    <motion.div
-      whileHover={{ y: -1, scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
-    >
-      <Component href={href} className={classes} {...props}>
-        {children}
-      </Component>
-    </motion.div>
+    <Component href={href} className={classes} {...props}>
+      {children}
+    </Component>
   );
 }
 

@@ -1,14 +1,11 @@
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { memo, useRef, useState } from "react";
 import { Mail, BriefcaseBusiness, GitBranch, Send } from "lucide-react";
 import SectionTitle from "./SectionTitle";
 import Button from "./ui/Button";
 import GlassCard from "./ui/GlassCard";
 import SectionShell from "./ui/SectionShell";
-import useAnimationBudget from "../hooks/useAnimationBudget";
 
-export default function Contact() {
-  const { shouldLimitMotion } = useAnimationBudget();
+function Contact() {
   const emailJsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
   const emailJsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const emailJsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -72,11 +69,6 @@ export default function Contact() {
       return `Subject must be at most ${MAX_SUBJECT_LENGTH} characters.`;
     }
     return "";
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 18 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
   };
 
   const handleInputChange = (event) => {
@@ -150,14 +142,8 @@ export default function Contact() {
         title="Let’s work together"
         subtitle="Open to internships and collaborative projects. If you have an idea, let's turn it into a polished product."
       />
-      <motion.div
-        className="grid grid-cols-1 gap-5 lg:grid-cols-[1.1fr_0.9fr]"
-        initial={shouldLimitMotion ? false : "hidden"}
-        whileInView={shouldLimitMotion ? undefined : "show"}
-        viewport={shouldLimitMotion ? undefined : { once: true, amount: 0.2 }}
-        transition={shouldLimitMotion ? undefined : { staggerChildren: 0.1 }}
-      >
-        <GlassCard className="p-5 sm:p-7" variants={shouldLimitMotion ? undefined : itemVariants}>
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+        <GlassCard className="p-5 sm:p-7">
           <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
             <div className="hidden" aria-hidden="true">
               <label htmlFor="website">Website</label>
@@ -254,7 +240,7 @@ export default function Contact() {
             </Button>
           </form>
         </GlassCard>
-        <GlassCard className="p-5 sm:p-6" variants={shouldLimitMotion ? undefined : itemVariants}>
+        <GlassCard className="p-5 sm:p-6">
           <h3 className="mt-0 mb-4 text-lg font-semibold text-white sm:text-xl">Contact Details</h3>
           <a
             href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"
@@ -266,7 +252,7 @@ export default function Contact() {
           <a
             href="https://github.com/mesbahimohammedyassirsolicode-star"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="my-2 flex items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
           >
             <GitBranch size={16} />
@@ -275,14 +261,16 @@ export default function Contact() {
           <a
             href="https://www.linkedin.com/in/mohammed-yassir-mesbahi-600691329/"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="my-2 flex items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
           >
             <BriefcaseBusiness size={16} />
             LinkedIn
           </a>
         </GlassCard>
-      </motion.div>
+      </div>
     </SectionShell>
   );
 }
+
+export default memo(Contact);

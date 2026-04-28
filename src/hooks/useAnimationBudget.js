@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { createContext, createElement, useContext, useEffect, useMemo, useState } from "react";
 
-export default function useAnimationBudget() {
-  const prefersReducedMotion = useReducedMotion();
-  const [isTouchLike, setIsTouchLike] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
+const AnimationBudgetContext = createContext({
+  prefersReducedMotion: false,
+  shouldLimitMotion: false,
+});
 
-    return window.matchMedia("(hover: none), (pointer: coarse)").matches;
-  });
+export function AnimationBudgetProvider({ children }) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isTouchLike, setIsTouchLike] = useState(false);
   const [isLowPowerDevice] = useState(() => {
     if (typeof navigator === "undefined") {
       return false;
@@ -25,14 +23,35 @@ export default function useAnimationBudget() {
       return undefined;
     }
 
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mediaQuery = window.matchMedia("(hover: none), (pointer: coarse)");
+    const updateReducedMotion = () => setPrefersReducedMotion(reducedMotionQuery.matches);
     const updateInputMode = () => setIsTouchLike(mediaQuery.matches);
+    updateReducedMotion();
+    updateInputMode();
+    reducedMotionQuery.addEventListener("change", updateReducedMotion);
     mediaQuery.addEventListener("change", updateInputMode);
-    return () => mediaQuery.removeEventListener("change", updateInputMode);
+    return () => {
+      reducedMotionQuery.removeEventListener("change", updateReducedMotion);
+      mediaQuery.removeEventListener("change", updateInputMode);
+    };
   }, []);
 
-  return {
-    prefersReducedMotion,
-    shouldLimitMotion: prefersReducedMotion || isTouchLike || isLowPowerDevice,
-  };
+  const value = useMemo(
+    () => ({
+      prefersReducedMotion,
+      shouldLimitMotion: prefersReducedMotion || isTouchLike || isLowPowerDevice,
+    }),
+    [prefersReducedMotion, isLowPowerDevice, isTouchLike]
+  );
+
+  return createElement(AnimationBudgetContext.Provider, { value }, children);
+}
+
+export default function useAnimationBudget() {
+  return useContext(AnimationBudgetContext);
+}
+
+export function useAnimationBudgetContext() {
+  return useContext(AnimationBudgetContext);
 }

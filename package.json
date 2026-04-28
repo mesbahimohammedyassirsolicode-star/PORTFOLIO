@@ -10,11 +10,15 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "security:audit": "npm audit --omit=dev",
+    "security:headers": "node scripts/check-security-headers.mjs",
+    "security:secrets": "node scripts/check-staged-secrets.mjs",
+    "security:ci": "npm run security:audit && npm run security:headers",
+    "prepare": "husky"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
-    "framer-motion": "^12.38.0",
     "lucide-react": "^1.11.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
@@ -29,6 +33,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "husky": "^9.1.7",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.10"

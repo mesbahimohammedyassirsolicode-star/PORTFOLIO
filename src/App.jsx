@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -9,70 +9,86 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import SectionDivider from "./components/SectionDivider";
 import useAnimationBudget from "./hooks/useAnimationBudget";
-import useSmoothWheelScroll from "./hooks/useSmoothWheelScroll";
+
+const SECTION_IDS = ["home", "about", "technologies", "skills", "tools", "projects", "contact"];
 
 function App() {
-  const sectionIds = useMemo(
-    () => ["home", "about", "technologies", "skills", "tools", "projects", "contact"],
-    []
-  );
   const [activeSection, setActiveSection] = useState("home");
   const { shouldLimitMotion } = useAnimationBudget();
-  useSmoothWheelScroll({ enabled: !shouldLimitMotion });
 
   useEffect(() => {
-    const sections = sectionIds
+    const sections = SECTION_IDS
       .map((id) => document.getElementById(id))
       .filter((section) => section instanceof HTMLElement);
-    if (!sections.length) {
+    if (!sections.length || typeof IntersectionObserver === "undefined") {
       return undefined;
     }
 
-    const getCurrentSection = () => {
-      const headerElement = document.querySelector("header");
-      const headerHeight = headerElement instanceof HTMLElement ? headerElement.offsetHeight : 84;
-      const viewportAnchor = window.scrollY + headerHeight + 100;
+    const visibleSections = new Map();
+    let rafId = 0;
+    const updateActiveSection = () => {
+      const sortedByVisibility = [...visibleSections.entries()].sort((a, b) => b[1] - a[1]);
+      if (!sortedByVisibility.length) {
+        return;
+      }
+      const nextSectionId = sortedByVisibility[0][0];
+      setActiveSection((previousSection) =>
+        previousSection === nextSectionId ? previousSection : nextSectionId
+      );
+    };
 
-      let currentSectionId = sections[0].id;
-      for (const section of sections) {
-        if (viewportAnchor >= section.offsetTop) {
-          currentSectionId = section.id;
-        } else {
-          break;
-        }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || entry.intersectionRatio <= 0) {
+            visibleSections.delete(entry.target.id);
+            return;
+          }
+          visibleSections.set(entry.target.id, entry.intersectionRatio);
+        });
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(updateActiveSection);
+      },
+      {
+        root: null,
+        rootMargin: "-12% 0px -38% 0px",
+        threshold: [0, 0.1, 0.2, 0.35],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    const handleScrollBounds = () => {
+      if (window.scrollY <= 4) {
+        setActiveSection((previousSection) => (previousSection === "home" ? previousSection : "home"));
+        return;
       }
 
-      return currentSectionId;
-    };
-
-    let rafId = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        const currentSectionId = getCurrentSection();
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportBottom = window.scrollY + window.innerHeight;
+      if (viewportBottom >= documentHeight - 6) {
         setActiveSection((previousSection) =>
-          previousSection === currentSectionId ? previousSection : currentSectionId
+          previousSection === "contact" ? previousSection : "contact"
         );
-      });
+      }
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("scroll", handleScrollBounds, { passive: true });
+    handleScrollBounds();
 
     return () => {
+      window.removeEventListener("scroll", handleScrollBounds);
       cancelAnimationFrame(rafId);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      observer.disconnect();
     };
-  }, [sectionIds]);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-x-clip">
       {shouldLimitMotion ? null : (
         <>
-          <div className="pointer-events-none fixed -right-24 -top-28 z-0 hidden h-80 w-80 rounded-full bg-violet-600/18 blur-3xl lg:block" />
-          <div className="pointer-events-none fixed -bottom-24 -left-20 z-0 hidden h-72 w-72 rounded-full bg-indigo-500/14 blur-3xl lg:block" />
+          <div className="pointer-events-none fixed -right-24 -top-28 z-0 hidden h-72 w-72 rounded-full bg-violet-600/14 blur-2xl lg:block" />
+          <div className="pointer-events-none fixed -bottom-24 -left-20 z-0 hidden h-64 w-64 rounded-full bg-indigo-500/12 blur-2xl lg:block" />
           <div className="bg-grid" />
         </>
       )}
