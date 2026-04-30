@@ -87,8 +87,9 @@ function App() {
     <div className="relative min-h-screen overflow-x-clip">
       {shouldLimitMotion ? null : (
         <>
-          <div className="pointer-events-none fixed -right-24 -top-28 z-0 hidden h-72 w-72 rounded-full bg-violet-600/14 blur-2xl lg:block" />
-          <div className="pointer-events-none fixed -bottom-24 -left-20 z-0 hidden h-64 w-64 rounded-full bg-indigo-500/12 blur-2xl lg:block" />
+          <div className="pointer-events-none fixed -right-32 -top-32 z-0 hidden h-80 w-80 rounded-full bg-violet-600/10 blur-3xl lg:block" />
+          <div className="pointer-events-none fixed -bottom-28 -left-24 z-0 hidden h-72 w-72 rounded-full bg-indigo-500/8 blur-3xl lg:block" />
+          <div className="pointer-events-none fixed top-1/2 right-1/4 z-0 hidden h-48 w-48 rounded-full bg-pink-500/5 blur-3xl lg:block" />
           <div className="bg-grid" />
         </>
       )}

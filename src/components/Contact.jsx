@@ -139,12 +139,12 @@ function Contact() {
     <SectionShell id="contact" amount={0.25}>
       <SectionTitle
         eyebrow="Contact"
-        title="Let’s work together"
+        title="Let's work together"
         subtitle="Open to internships and collaborative projects. If you have an idea, let's turn it into a polished product."
       />
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-        <GlassCard className="p-5 sm:p-7">
-          <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <GlassCard className="p-6 sm:p-8">
+          <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
             <div className="hidden" aria-hidden="true">
               <label htmlFor="website">Website</label>
               <input
@@ -159,7 +159,7 @@ function Contact() {
             </div>
 
             <div>
-              <label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="name" className="mb-2.5 block text-sm font-medium text-slate-300/90">
                 Name
               </label>
               <input
@@ -175,7 +175,7 @@ function Contact() {
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="email" className="mb-2.5 block text-sm font-medium text-slate-300/90">
                 Email
               </label>
               <input
@@ -191,7 +191,7 @@ function Contact() {
             </div>
 
             <div>
-              <label htmlFor="subject" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="subject" className="mb-2.5 block text-sm font-medium text-slate-300/90">
                 Subject
               </label>
               <input
@@ -207,7 +207,7 @@ function Contact() {
             </div>
 
             <div>
-              <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="message" className="mb-2.5 block text-sm font-medium text-slate-300/90">
                 Message
               </label>
               <textarea
@@ -226,47 +226,57 @@ function Contact() {
               <p
                 className={
                   status.type === "success"
-                    ? "text-sm text-emerald-300"
-                    : "text-sm text-rose-300"
+                    ? "text-sm font-medium text-emerald-300"
+                    : "text-sm font-medium text-rose-300"
                 }
               >
                 {status.message}
               </p>
             ) : null}
 
-            <Button type="submit" className="w-full gap-2 sm:w-fit" disabled={isSubmitting}>
+            <Button type="submit" className="w-full gap-2.5 sm:w-fit" disabled={isSubmitting}>
               <Send size={16} />
               {isSubmitting ? "Sending..." : "Send Message"}
             </Button>
           </form>
         </GlassCard>
-        <GlassCard className="p-5 sm:p-6">
-          <h3 className="mt-0 mb-4 text-lg font-semibold text-white sm:text-xl">Contact Details</h3>
-          <a
-            href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"
-            className="my-2 flex flex-wrap items-center gap-2 break-all text-sm text-slate-300 transition hover:text-white sm:text-base"
-          >
-            <Mail size={16} />
-            mesbahi.mohammedyassir.solicode@gmail.com
-          </a>
-          <a
-            href="https://github.com/mesbahimohammedyassirsolicode-star"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="my-2 flex items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
-          >
-            <GitBranch size={16} />
-            GitHub
-          </a>
-          <a
-            href="https://www.linkedin.com/in/mohammed-yassir-mesbahi-600691329/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="my-2 flex items-center gap-2 text-sm text-slate-300 transition hover:text-white sm:text-base"
-          >
-            <BriefcaseBusiness size={16} />
-            LinkedIn
-          </a>
+        <GlassCard className="relative overflow-hidden p-7 sm:p-9 flex flex-col justify-center">
+          <div className="pointer-events-none absolute -bottom-14 -right-14 h-56 w-56 rounded-full bg-pink-500/[0.06] blur-[64px]" />
+          <h3 className="mt-0 mb-7 text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">Contact Details</h3>
+          
+          <div className="space-y-3 relative z-10">
+            <a
+              href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"
+              className="group flex items-center gap-4 break-all rounded-xl border border-transparent p-3.5 text-sm text-slate-300/90 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04] sm:text-base"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-pink-500/[0.12] text-pink-300 transition-all duration-300 group-hover:bg-pink-500/[0.2] group-hover:text-pink-200 group-hover:scale-105">
+                <Mail size={18} />
+              </div>
+              mesbahi.mohammedyassir.solicode@gmail.com
+            </a>
+            <a
+              href="https://github.com/mesbahimohammedyassirsolicode-star"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 rounded-xl border border-transparent p-3.5 text-sm text-slate-300/90 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04] sm:text-base"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500/[0.12] text-indigo-300 transition-all duration-300 group-hover:bg-indigo-500/[0.2] group-hover:text-indigo-200 group-hover:scale-105">
+                <GitBranch size={18} />
+              </div>
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/mohammed-yassir-mesbahi-600691329/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 rounded-xl border border-transparent p-3.5 text-sm text-slate-300/90 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04] sm:text-base"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-500/[0.12] text-sky-300 transition-all duration-300 group-hover:bg-sky-500/[0.2] group-hover:text-sky-200 group-hover:scale-105">
+                <BriefcaseBusiness size={18} />
+              </div>
+              LinkedIn
+            </a>
+          </div>
         </GlassCard>
       </div>
     </SectionShell>

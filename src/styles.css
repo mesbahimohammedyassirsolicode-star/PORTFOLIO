@@ -2,93 +2,146 @@
 
 @layer base {
   :root {
+    /* ── Core palette (same hues, refined tones) ── */
     --surface-0: #020617;
-    --surface-1: #0b1220;
+    --surface-1: #070c16;
     --surface-2: #0f172a;
-    --accent-from: #8b5cf6;
+    --accent-from: #6366f1;
     --accent-mid: #a855f7;
-    --accent-to: #6366f1;
-    --accent-soft: rgba(139, 92, 246, 0.2);
-    --accent-border: rgba(167, 139, 250, 0.3);
-    --accent-shadow: rgba(99, 102, 241, 0.34);
-    --accent-text: #c4b5fd;
+    --accent-to: #ec4899;
+    --accent-soft: rgba(168, 85, 247, 0.12);
+    --accent-border: rgba(236, 72, 153, 0.25);
+    --accent-shadow: rgba(168, 85, 247, 0.25);
+    --accent-text: #e879f9;
+
+    /* ── Spacing scale ── */
+    --space-xs: 0.375rem;
+    --space-sm: 0.75rem;
+    --space-md: 1.25rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-2xl: 5rem;
+
+    /* ── Radius scale ── */
+    --radius-sm: 0.625rem;
+    --radius-md: 1rem;
+    --radius-lg: 1.375rem;
+    --radius-xl: 1.75rem;
+    --radius-pill: 999px;
+
+    /* ── Transitions ── */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --duration-fast: 180ms;
+    --duration-base: 280ms;
+    --duration-slow: 420ms;
   }
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 88px;
+    scroll-padding-top: 96px;
     text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     margin: 0;
-    font-family: Inter, "Segoe UI", "SF Pro Display", Roboto, Arial, sans-serif;
+    font-family: Outfit, Inter, "Segoe UI", "SF Pro Display", Roboto, Arial, sans-serif;
     font-feature-settings: "cv11", "ss01";
     @apply bg-slate-950 text-slate-100 antialiased;
     background:
-      radial-gradient(circle at 15% -15%, rgba(139, 92, 246, 0.16), transparent 45%),
-      radial-gradient(circle at 85% -10%, rgba(255, 255, 255, 0.06), transparent 40%),
-      linear-gradient(160deg, #020617 0%, #030712 45%, #020617 100%);
+      radial-gradient(ellipse 80% 50% at 10% -15%, rgba(99, 102, 241, 0.14), transparent 50%),
+      radial-gradient(ellipse 70% 40% at 90% 5%, rgba(236, 72, 153, 0.08), transparent 45%),
+      radial-gradient(ellipse 60% 60% at 50% 60%, rgba(99, 102, 241, 0.04), transparent 60%),
+      linear-gradient(170deg, #020617 0%, #030712 40%, #040a14 100%);
     overflow-x: clip;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
 
   * {
-    @apply border-slate-700/40;
+    @apply border-slate-700/30;
   }
 
   ::selection {
-    background: rgba(167, 139, 250, 0.32);
+    background: rgba(168, 85, 247, 0.3);
     color: #fff;
   }
 }
 
 @layer components {
+  /* ── Reveal Animations ── */
   @keyframes fade-up-in {
     from {
       opacity: 0;
-      transform: translate3d(0, 14px, 0);
+      transform: translate3d(0, 20px, 0) scale(0.995);
     }
     to {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes fade-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
   .reveal-fade-up {
     opacity: 0;
-    animation: fade-up-in 560ms ease-out forwards;
+    animation: fade-up-in 700ms var(--ease-out-expo) forwards;
     will-change: transform, opacity;
   }
 
   .reveal-delay-1 {
-    animation-delay: 100ms;
+    animation-delay: 120ms;
   }
 
   .reveal-delay-2 {
-    animation-delay: 180ms;
+    animation-delay: 220ms;
   }
 
   .reveal-delay-3 {
-    animation-delay: 260ms;
+    animation-delay: 320ms;
   }
 
   .reveal-delay-4 {
-    animation-delay: 340ms;
+    animation-delay: 420ms;
   }
 
+  /* ── Section Container ── */
   .section {
-    @apply relative z-10 mx-auto w-[min(1120px,92vw)] py-10 sm:py-14 md:py-16;
+    @apply relative z-10 mx-auto w-[min(1100px,90vw)] py-14 sm:py-20 md:py-24;
   }
 
+  /* ── Glassmorphism Cards ── */
   .glass {
-    @apply rounded-3xl border border-white/12 bg-gradient-to-br from-white/[0.12] to-white/[0.04] shadow-xl;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 14px 34px rgba(2, 6, 23, 0.44);
+    @apply rounded-2xl border border-white/[0.07] bg-white/[0.02] backdrop-blur-2xl;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.04),
+      0 0 0 0.5px rgba(0, 0, 0, 0.3),
+      0 8px 32px rgba(2, 6, 23, 0.4),
+      0 24px 48px -12px rgba(2, 6, 23, 0.25);
     backface-visibility: hidden;
+    transition: border-color var(--duration-base) ease, box-shadow var(--duration-slow) ease;
   }
 
+  .glass:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* ── Gradient Border System ── */
   .gradient-border {
     position: relative;
-    border-radius: 1.5rem;
+    border-radius: var(--radius-xl);
     isolation: isolate;
   }
 
@@ -99,82 +152,143 @@
     border-radius: inherit;
     z-index: -1;
     background: linear-gradient(
-      120deg,
-      color-mix(in oklab, var(--accent-from), white 24%),
-      color-mix(in oklab, var(--accent-mid), white 20%),
-      color-mix(in oklab, var(--accent-to), white 24%)
+      135deg,
+      var(--accent-from),
+      var(--accent-mid),
+      var(--accent-to)
     );
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
+    opacity: 0.2;
+    transition: opacity var(--duration-base) ease, filter var(--duration-base) ease;
+    filter: blur(1px);
   }
 
   .gradient-border:hover::before {
     opacity: 0.45;
+    filter: blur(3px);
   }
 
+  /* ── Primary Button ── */
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center rounded-xl border border-transparent px-4 py-2.5 text-sm font-semibold text-white transition duration-200 sm:px-6 sm:py-3;
-    background-image: linear-gradient(120deg, var(--accent-from), var(--accent-to));
-    box-shadow: 0 14px 30px var(--accent-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    @apply inline-flex min-h-12 items-center justify-center rounded-xl border border-transparent px-5 py-3 text-sm font-semibold text-white transition-all sm:px-7 sm:py-3.5;
+    background-image: linear-gradient(135deg, var(--accent-from), var(--accent-mid), var(--accent-to));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 4px 12px var(--accent-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.01em;
   }
 
   .btn-primary:hover {
-    box-shadow: 0 18px 36px var(--accent-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    background-position: 100% 50%;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 8px 24px var(--accent-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    filter: brightness(1.08);
   }
 
+  .btn-primary:active {
+    filter: brightness(0.95);
+  }
+
+  /* ── Ghost Button ── */
   .btn-ghost {
-    @apply inline-flex min-h-11 items-center justify-center rounded-xl border border-white/25 bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-slate-100 transition duration-200 hover:border-white/45 hover:bg-white/[0.09] sm:px-6 sm:py-3;
+    @apply inline-flex min-h-12 items-center justify-center rounded-xl border border-white/[0.12] bg-white/[0.03] px-5 py-3 text-sm font-semibold text-slate-200 backdrop-blur-md sm:px-7 sm:py-3.5;
+    transition: all var(--duration-base) var(--ease-out-expo);
+    letter-spacing: 0.01em;
   }
 
+  .btn-ghost:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(2, 6, 23, 0.3);
+  }
+
+  /* ── Button Interactive Layer ── */
   .btn-interactive {
     transform: translate3d(0, 0, 0);
-    transition: transform 180ms ease, box-shadow 180ms ease;
+    transition:
+      transform var(--duration-fast) var(--ease-spring),
+      box-shadow var(--duration-base) ease,
+      filter var(--duration-fast) ease,
+      background-position var(--duration-slow) ease;
     will-change: transform;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .btn-interactive:hover {
-      transform: translateY(-1px) scale(1.01);
+      transform: translateY(-2px) scale(1.015);
     }
   }
 
   .btn-interactive:active {
-    transform: scale(0.99);
+    transform: scale(0.975);
+    transition-duration: 80ms;
   }
 
+  /* ── Nav Link Hover ── */
   .nav-link-hover {
-    transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+    transition:
+      transform var(--duration-fast) ease,
+      background-color var(--duration-fast) ease,
+      color var(--duration-fast) ease,
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease;
   }
 
+  /* ── Project Card Hover ── */
   .project-card-hover {
-    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    transition:
+      transform var(--duration-base) var(--ease-out-expo),
+      box-shadow var(--duration-base) ease,
+      border-color var(--duration-base) ease;
   }
 
+  /* ── Brand Accent ── */
   .brand-accent {
     color: var(--accent-text);
   }
 
+  /* ── Active Nav Link ── */
   .nav-link-active {
     color: #ffffff;
     background: var(--accent-soft);
     border-color: var(--accent-border);
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.38);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.3);
   }
 
+  /* ── Hero Name Gradient Text ── */
   .hero-name {
     background: linear-gradient(
-      110deg,
+      to right,
       #fff 0%,
-      color-mix(in oklab, var(--accent-mid), white 72%) 35%,
-      #fff 75%
+      var(--accent-text) 50%,
+      var(--accent-mid) 100%
     );
-    background-size: 150% 100%;
+    background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     text-wrap: balance;
+    animation: textShine 8s ease-in-out infinite;
   }
 
+  @keyframes textShine {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* ── Hero Image Shell ── */
   .hero-image-shell {
     position: relative;
     overflow: hidden;
@@ -186,66 +300,92 @@
     inset: 0;
     background: linear-gradient(
       160deg,
-      rgba(255, 255, 255, 0.18) 0%,
-      rgba(255, 255, 255, 0.03) 34%,
-      rgba(2, 6, 23, 0.35) 100%
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.02) 34%,
+      rgba(2, 6, 23, 0.3) 100%
     );
     pointer-events: none;
   }
 
+  /* ── Form Field ── */
   .field-input {
-    @apply w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 transition focus:border-violet-400 focus:outline-none;
+    @apply w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3.5 text-sm text-white placeholder:text-slate-500 backdrop-blur-sm;
+    transition: all var(--duration-base) ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.01em;
+  }
+
+  .field-input:focus {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
+    box-shadow:
+      0 0 0 3px rgba(168, 85, 247, 0.12),
+      inset 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .field-input:focus-visible {
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+    box-shadow:
+      0 0 0 3px rgba(168, 85, 247, 0.15),
+      inset 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
+  /* ── Hover States (pointer devices only) ── */
   @media (hover: hover) and (pointer: fine) {
     .nav-link-hover:hover {
       transform: translateY(-1px);
-      border-color: rgba(167, 139, 250, 0.35);
-      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(167, 139, 250, 0.25);
+      background: rgba(255, 255, 255, 0.06);
       color: #ffffff;
     }
 
     .project-card-hover:hover {
-      transform: translateY(-3px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 38px rgba(2, 6, 23, 0.5);
-      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-4px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 0 0 0.5px rgba(255, 255, 255, 0.08),
+        0 24px 48px rgba(2, 6, 23, 0.45),
+        0 8px 16px rgba(2, 6, 23, 0.3);
+      border-color: rgba(255, 255, 255, 0.15);
     }
   }
 }
 
 @layer utilities {
+  /* ── Background Grid ── */
   .bg-grid {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.1;
-    background-size: 42px 42px;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-    mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+    opacity: 0.06;
+    background-size: 56px 56px;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 100%);
   }
 
+  /* ── Section Glow ── */
   .section-glow {
     position: absolute;
-    width: 340px;
-    height: 340px;
-    border-radius: 999px;
+    width: 380px;
+    height: 380px;
+    border-radius: var(--radius-pill);
     background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
-    filter: blur(24px);
+    filter: blur(32px);
     pointer-events: none;
     z-index: 0;
     will-change: opacity;
+    opacity: 0.6;
   }
 
+  /* ── Heading Balance ── */
   .heading-balance {
     text-wrap: balance;
   }
 
+  /* ── Mobile Optimizations ── */
   @media (max-width: 640px) {
     html,
     body {
@@ -254,28 +394,44 @@
     }
 
     .bg-grid {
-      opacity: 0.06;
-      background-size: 34px 34px;
+      opacity: 0.03;
+      background-size: 40px 40px;
     }
 
     .glass {
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 10px 26px rgba(2, 6, 23, 0.36);
+      border-radius: var(--radius-lg);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 6px 20px rgba(2, 6, 23, 0.35);
     }
 
     .section {
-      width: min(1120px, 94vw);
-      padding-top: 2.25rem;
-      padding-bottom: 2.25rem;
+      width: min(1100px, 92vw);
+      padding-top: 2.5rem;
+      padding-bottom: 2.5rem;
     }
 
     .section-glow {
-      width: 220px;
-      height: 220px;
-      filter: blur(14px);
-      opacity: 0.26;
+      width: 200px;
+      height: 200px;
+      filter: blur(18px);
+      opacity: 0.2;
+    }
+
+    .gradient-border {
+      border-radius: var(--radius-lg);
     }
   }
 
+  /* ── Tablet Optimizations ── */
+  @media (min-width: 641px) and (max-width: 1023px) {
+    .section {
+      padding-top: 3.5rem;
+      padding-bottom: 3.5rem;
+    }
+  }
+
+  /* ── Reduced Motion ── */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

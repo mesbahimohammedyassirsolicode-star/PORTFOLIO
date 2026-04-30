@@ -33,15 +33,15 @@ function Skills() {
         subtitle="Collaboration and personal strengths I bring to every project."
       />
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
         {softSkills.map((skill) => (
             <GlassCard
             key={skill.title}
-            className="group relative overflow-hidden p-4 text-center sm:p-5 md:p-6"
+            className="group relative overflow-hidden p-5 text-center sm:p-6 md:p-7"
           >
-              <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-violet-400/10 blur-2xl transition group-hover:bg-violet-400/15" />
+              <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-pink-500/[0.06] blur-2xl transition-all duration-500 group-hover:bg-pink-500/[0.15] group-hover:scale-150" />
             <div className="relative">
-              <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl border border-white/20 bg-white/10 text-sm font-semibold text-violet-200">
+              <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.03] text-lg font-bold text-white shadow-[0_0_24px_rgba(255,255,255,0.03)] transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_8px_24px_rgba(236,72,153,0.12)]">
                 {skill.title
                   .split(" ")
                   .map((word) => word[0])
@@ -49,13 +49,13 @@ function Skills() {
                   .slice(0, 2)
                   .toUpperCase()}
               </div>
-              <h3 className="mt-3 text-sm font-semibold text-white sm:text-base">{skill.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-300">{skill.description}</p>
+              <h3 className="mt-4 text-base font-semibold tracking-[-0.01em] text-white sm:text-lg group-hover:text-pink-300 transition-colors duration-300">{skill.title}</h3>
+              <p className="mt-2.5 text-sm leading-relaxed text-slate-400/90">{skill.description}</p>
             </div>
           </GlassCard>
         ))}
       </div>
-      <div className="mt-8 flex justify-center">
+      <div className="mt-10 flex justify-center">
         <Button as="a" href="#tools" variant="secondary" className="gap-2">
           View Tools <ArrowRight size={16} />
         </Button>
