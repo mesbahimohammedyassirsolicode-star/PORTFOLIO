@@ -747,6 +747,9 @@ aside.card { background: var(--panel); border-color: var(--line-subtle); border-
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 20%, transparent);
 }
 .field [aria-invalid="true"] { border-color: var(--err); }
+/* Fields sit on --surface-hi, where --faint measures 4.36:1 light / 3.80:1 dark
+   and fails AA. --muted clears 4.5:1 on that surface in both modes. */
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 1; }
 
 .field-err { display: none; align-items: center; gap: .375rem; margin-top: .375rem; font-size: .75rem; font-weight: 510; color: var(--err); }
 .field-err::before { content: "\2715"; }
