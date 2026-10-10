@@ -86,6 +86,62 @@ Replaces the token block at `src/styles.css:6-58`.
 `--ok` / `--err` share the light values' equivalents (`#15803d` / `#b91c1c`)
 for contrast against white.
 
+### Motion — scroll-driven 3D reveals
+
+The existing `.reveal` / `.reveal.in` system (`src/App.jsx:70-90`,
+`src/styles.css:674-678`) currently animates a plain
+`opacity + translateY(18px)` fade-up. Replace the fade with a 3D settle.
+
+**Behaviour.** When a `.reveal` block crosses into view it starts rotated in
+depth and settles flat:
+
+```
+initial:  opacity 0
+          translate3d(0, 28px, -80px)
+          rotateX(6deg)            /* subtle downward tilt toward viewer */
+settled:  opacity 1
+          translate3d(0, 0, 0)
+          rotateX(0deg)
+```
+
+Duration 720ms, easing `cubic-bezier(.16, 1, .3, 1)` (the value already used
+throughout this codebase for reveals). `perspective: 1200px` on the section
+container establishes the depth field; `transform-style: flat` so children do
+not inherit 3D context unexpectedly.
+
+**Stagger.** Sibling `.reveal` blocks within the same section are delayed
+`0ms, 70ms, 140ms` via `:nth-child`, so a card group cascades in rather than
+appearing at once. Cap at three steps; beyond that the later items should not
+wait, or the section feels slow to become readable.
+
+**Capability gating.** `useAnimationBudget` already computes
+`shouldLimitMotion` = `prefersReducedMotion || isTouchLike || isLowPowerDevice`
+(`src/hooks/useAnimationBudget.js:40-45`), but nothing currently reads it for
+reveals — `App.jsx` imports no hook. Wire it up:
+
+- Gate on `shouldLimitMotion`. When true, `.reveal` keeps today's 2D fade-up
+  and the 3D transform is never applied.
+- The existing `@media (prefers-reduced-motion: reduce)` block
+  (`src/styles.css:71-76`) must additionally force `transform: none` on
+  `.reveal.in`, since it is applied via JS-driven class rather than only CSS.
+- Gate on pointer capability as well: a 3D scroll reveal reads as lag on
+  touch devices, so touch keeps the 2D path regardless of power.
+
+**Ancestor constraint.** `transform` on an element makes `position: fixed`
+descendants resolve against that transformed ancestor instead of the viewport.
+Two fixed elements exist: `.skip` (`src/styles.css:151`) and `.mobile-nav`
+(`src/styles.css:315`). Neither may be placed inside, or given a class on, a
+`.reveal` block. Existing `.reveal` usage is on content blocks inside
+`<main>` only, which keeps this safe — but do not add `.reveal` to `Navbar`,
+the mobile drawer, or the footer, or the mobile menu will stop covering the
+viewport.
+
+**Not adopted.** Hover tilt, 3D scroll-linked section transitions, and 3D hero
+parallax were considered and rejected. Tilt reads as gimmicky on text-dense
+cards, section-level 3D conflicts with `scroll-padding-top` and anchor
+scrolling, and hero parallax competes with the reveal entrance. The reveal
+settle is the single coherent motion idea.
+
 ### Radius by role
 
 | Token | Value | Use |
@@ -222,7 +278,7 @@ index.html                    font link, og-image, theme-color
 package.json                  remove 4 unused deps
 vite.config.js                remove tailwind plugin
 src/styles.css                full token rewrite; dead CSS removed
-src/App.jsx                   wire useSpotlight
+src/App.jsx                   wire useSpotlight + useAnimationBudget gating
 src/components/Navbar.jsx     header, toggles
 src/components/Hero.jsx       remove mockup + marquee, new stats layout
 src/components/About.jsx      facts row, MYM panel
@@ -245,8 +301,12 @@ Deleted: the ten files listed under Cleanup.
    - headings do not clip or overlap
    - every interactive element has hover, `:focus-visible`, active, and
      disabled states
-   - reduced-motion respected (marquee removed, float removed; badge pulse and
-     reveals must still disable)
+   - reduced-motion respected: no 3D transform applied, reveals collapse to
+     plain fade, badge pulse disabled
+   - 3D reveals settle fully flat — no residual `rotateX` or `translateZ` on
+     any `.reveal.in` element
+   - mobile drawer still covers the full viewport (regression check for the
+     transformed-ancestor constraint above)
    - lang toggle translates every visible string, including the new
      `lbl_filter`
    - theme toggle persists across reload with no flash of the wrong theme
