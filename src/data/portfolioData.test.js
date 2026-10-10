@@ -11,8 +11,10 @@ describe("project assets", () => {
   it.each(projects.map((p) => [p.id, p.img]))(
     "%s resolves to a file under public/",
     (_id, img) => {
-      const rel = img.replace(/^assets\/projects\//, "");
-      expect(fs.existsSync(path.join(PUBLIC, rel))).toBe(true);
+      // No normalisation: `img` must resolve under public/ exactly as written.
+      // Stripping an `assets/projects/` prefix here would strip the very defect
+      // this test exists to catch, making the assertion vacuously true.
+      expect(fs.existsSync(path.join(PUBLIC, img))).toBe(true);
     }
   );
 });
