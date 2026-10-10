@@ -27,7 +27,7 @@ function Projects({ t }) {
           </div>
           <div>
             {/* Filter bar */}
-            <div className="filters" role="group" aria-label={t('lbl_filter') || 'Project filter'}>
+            <div className="filters" role="group" aria-label={t('lbl_filter')}>
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
@@ -49,7 +49,7 @@ function Projects({ t }) {
             {visible.map((proj, idx) => (
               <article
                 key={proj.id}
-                className={`project reveal${idx === 0 ? ' featured' : ''}`}
+                className={`project reveal card-spotlight${idx === 0 ? ' featured' : ''}`}
                 data-cat={proj.cat}
               >
                 <div className="visual">
