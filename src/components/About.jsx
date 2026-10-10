@@ -1,30 +1,71 @@
 import { memo } from "react";
-import SectionTitle from "./SectionTitle";
-import GlassCard from "./ui/GlassCard";
-import SectionShell from "./ui/SectionShell";
 
-function About() {
+// About section — matches p01-accueil.html About + MYM + Journey + Mindset structure
+function About({ t }) {
   return (
-    <SectionShell id="about" amount={0.25}>
-      <SectionTitle
-        eyebrow="About"
-        title="About Me"
-        subtitle="Focused on building practical systems that connect user experience with reliable logic."
-      />
-      <GlassCard className="reveal-fade-up reveal-delay-1 relative overflow-hidden p-7 sm:p-10 lg:p-14">
-        <div className="pointer-events-none absolute -right-36 -top-36 h-72 w-72 rounded-full bg-pink-500/[0.06] blur-[80px]" />
-        <div className="pointer-events-none absolute -bottom-36 -left-36 h-72 w-72 rounded-full bg-indigo-500/[0.06] blur-[80px]" />
-        
-        <div className="relative z-10 space-y-6">
-          <p className="text-base font-normal leading-[1.8] text-slate-200/90 sm:text-lg sm:leading-[1.85] tracking-[-0.01em]">
-            I am Mohammed Yassir Mesbahi, a student at Solicode specializing in web development and Gestion Informatique, with a growing foundation in HTML, CSS, JavaScript, and PHP.
-          </p>
-          <p className="text-base font-normal leading-[1.8] text-slate-300/80 sm:text-lg sm:leading-[1.85] tracking-[-0.01em]">
-            I enjoy building modern applications where clean frontend interfaces connect with strong backend logic, with a strong focus on business and management systems that simplify workflows and improve efficiency.
-          </p>
+    <section id="about" data-spy="">
+      <div className="wrap">
+        {/* Intro row */}
+        <div className="about-intro reveal">
+          <div>
+            <p className="eyebrow">{t('about_eyebrow')}</p>
+            <h2>{t('about_title')}</h2>
+          </div>
+          <div>
+            <p className="lead">{t('about_text')}</p>
+            <dl className="facts">
+              <div><dt>{t('f1_k')}</dt><dd>{t('f1_v')}</dd></div>
+              <div><dt>{t('f2_k')}</dt><dd>{t('f2_v')}</dd></div>
+              <div><dt>{t('f3_k')}</dt><dd>{t('f3_v')}</dd></div>
+            </dl>
+          </div>
         </div>
-      </GlassCard>
-    </SectionShell>
+
+        {/* Card grid */}
+        <div className="about-grid">
+          {/* MYM startup card (inverted) */}
+          <article className="card mym reveal">
+            <span className="tag">{t('mym_tag')}</span>
+            <h3>Startup MYM</h3>
+            <p>{t('mym_desc')}</p>
+            <p className="status">{t('mym_status')}</p>
+          </article>
+
+          {/* Journey timeline */}
+          <article className="card reveal">
+            <h3>{t('tl_title')}</h3>
+            <ul className="timeline">
+              <li>
+                <strong>{t('t1')}</strong>
+                <span>{t('t1d')}</span>
+              </li>
+              <li>
+                <strong>{t('t2')}</strong>
+                <span>{t('t2d')}</span>
+              </li>
+              <li>
+                <strong>{t('t3')}</strong>
+                <span>{t('t3d')}</span>
+              </li>
+              <li>
+                <strong>{t('t4')}</strong>
+                <span>{t('t4d')}</span>
+              </li>
+            </ul>
+          </article>
+
+          {/* Engineering mindset (full row) */}
+          <article className="card reveal full-row">
+            <h3>{t('mind_title')}</h3>
+            <ul className="ticks">
+              <li>{t('mind1')}</li>
+              <li>{t('mind2')}</li>
+              <li>{t('mind3')}</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
   );
 }
 

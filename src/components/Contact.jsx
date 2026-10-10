@@ -1,285 +1,234 @@
-import { memo, useRef, useState } from "react";
-import { Mail, BriefcaseBusiness, GitBranch, Send } from "lucide-react";
-import SectionTitle from "./SectionTitle";
-import Button from "./ui/Button";
-import GlassCard from "./ui/GlassCard";
-import SectionShell from "./ui/SectionShell";
+import { memo, useState, useRef } from "react";
 
-function Contact() {
-  const emailJsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-  const emailJsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-  const emailJsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-  const MIN_NAME_LENGTH = 2;
-  const MAX_NAME_LENGTH = 100;
-  const MAX_SUBJECT_LENGTH = 150;
-  const MAX_MESSAGE_LENGTH = 2000;
-  const SUBMIT_COOLDOWN_MS = 30_000;
-  const EMAIL_REGEX =
-    /^(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*)@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+const EMAILJS = { serviceId: '', templateId: '', publicKey: '' };
 
-  const formRef = useRef(null);
-  const lastSubmitAtRef = useRef(0);
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-    website: "",
-  });
-  const [status, setStatus] = useState({ type: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const ICON_OK = (
+  <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.7-9.3a1 1 0 00-1.4-1.4L9 10.6 7.7 9.3a1 1 0 00-1.4 1.4l2 2a1 1 0 001.4 0l4-4z" clipRule="evenodd"/>
+  </svg>
+);
+const ICON_BAD = (
+  <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-4a1 1 0 00-1 1v3a1 1 0 002 0V7a1 1 0 00-1-1zm0 7a1 1 0 100 2 1 1 0 000-2z" clipRule="evenodd"/>
+  </svg>
+);
 
-  // Escape input characters that are commonly abused in injection payloads.
-  const sanitizeInput = (value) =>
-    value
-      .split("")
-      .filter((character) => {
-        const charCode = character.charCodeAt(0);
-        return charCode >= 32 && charCode !== 127;
-      })
-      .join("")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+function Contact({ t }) {
+  const [fields, setFields] = useState({ name: '', email: '', subject: '', message: '' });
+  const [errors, setErrors] = useState({});
+  const [alert, setAlert] = useState(null); // { kind: 'ok'|'bad', msg }
+  const [sending, setSending] = useState(false);
+  const [copyLabel, setCopyLabel] = useState(null);
+  const honeypotRef = useRef(null);
 
-  const sanitizeFormPayload = (payload) => ({
-    name: sanitizeInput(payload.name.trim()),
-    email: sanitizeInput(payload.email.trim().toLowerCase()),
-    subject: sanitizeInput(payload.subject.trim()),
-    message: sanitizeInput(payload.message.trim()),
-    website: payload.website.trim(),
-  });
+  const EMAIL = 'mesbahi.mohammedyassir.solicode@gmail.com';
 
-  const validateFormPayload = (payload) => {
-    if (payload.website) {
-      return "Submission blocked.";
-    }
-    if (payload.name.length < MIN_NAME_LENGTH || payload.name.length > MAX_NAME_LENGTH) {
-      return `Name must be ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters.`;
-    }
-    if (!EMAIL_REGEX.test(payload.email)) {
-      return "Please enter a valid email address.";
-    }
-    if (!payload.message || payload.message.length > MAX_MESSAGE_LENGTH) {
-      return `Message is required and must be at most ${MAX_MESSAGE_LENGTH} characters.`;
-    }
-    if (payload.subject.length > MAX_SUBJECT_LENGTH) {
-      return `Subject must be at most ${MAX_SUBJECT_LENGTH} characters.`;
-    }
-    return "";
+  const validate = () => {
+    const e = {};
+    if (fields.name.trim().length < 2) e.name = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fields.email.trim())) e.email = true;
+    if (!fields.subject.trim()) e.subject = true;
+    if (fields.message.trim().length < 10) e.message = true;
+    return e;
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormState((prev) => ({ ...prev, [name]: sanitizeInput(value) }));
-  };
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    if (honeypotRef.current?.value) return; // honeypot
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (isSubmitting) {
+    const e = validate();
+    setErrors(e);
+    if (Object.keys(e).length) return;
+
+    const last = Number(sessionStorage.getItem('lastSend') || 0);
+    if (Date.now() - last < 60000) {
+      setAlert({ kind: 'bad', msg: t('wait') });
       return;
     }
 
-    const now = Date.now();
-    if (now - lastSubmitAtRef.current < SUBMIT_COOLDOWN_MS) {
-      setStatus({
-        type: "error",
-        message: "Please wait a few seconds before sending another message.",
-      });
+    if (!EMAILJS.serviceId || !EMAILJS.templateId || !EMAILJS.publicKey) {
+      setAlert({ kind: 'bad', msg: t('fail') });
       return;
     }
 
-    const sanitizedPayload = sanitizeFormPayload(formState);
-    const validationError = validateFormPayload(sanitizedPayload);
-    if (validationError) {
-      setStatus({ type: "error", message: validationError });
-      return;
-    }
-
-    if (!emailJsPublicKey || !emailJsServiceId || !emailJsTemplateId) {
-      setStatus({
-        type: "error",
-        message: "Contact form is unavailable right now. Please try again later.",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    setStatus({ type: "", message: "" });
-
+    setSending(true);
+    setAlert(null);
     try {
-      const formElement = formRef.current;
-      if (!(formElement instanceof HTMLFormElement)) {
-        throw new Error("Form reference unavailable");
-      }
-      const { default: emailjs } = await import("@emailjs/browser");
-      await emailjs.send(emailJsServiceId, emailJsTemplateId, sanitizedPayload, {
-        publicKey: emailJsPublicKey,
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: EMAILJS.serviceId,
+          template_id: EMAILJS.templateId,
+          user_id: EMAILJS.publicKey,
+          template_params: {
+            from_name: fields.name.trim(),
+            reply_to: fields.email.trim(),
+            subject: fields.subject.trim(),
+            message: fields.message.trim(),
+          },
+        }),
       });
-
-      setStatus({
-        type: "success",
-        message: "Message sent successfully ✅",
-      });
-      lastSubmitAtRef.current = now;
-      setFormState({ name: "", email: "", subject: "", message: "", website: "" });
+      if (!res.ok) throw new Error('send failed');
+      sessionStorage.setItem('lastSend', String(Date.now()));
+      setFields({ name: '', email: '', subject: '', message: '' });
+      setErrors({});
+      setAlert({ kind: 'ok', msg: t('ok') });
     } catch {
-      setStatus({
-        type: "error",
-        message: "Could not send your message. Please try again in a moment.",
-      });
+      setAlert({ kind: 'bad', msg: t('fail') });
     } finally {
-      setIsSubmitting(false);
+      setSending(false);
+    }
+  };
+
+  const handleCopy = () => {
+    const done = () => {
+      setCopyLabel(t('copied'));
+      setTimeout(() => setCopyLabel(null), 2200);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(EMAIL).then(done).catch(done);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = EMAIL;
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* noop */ }
+      document.body.removeChild(ta);
+      done();
     }
   };
 
   return (
-    <SectionShell id="contact" amount={0.25}>
-      <SectionTitle
-        eyebrow="Contact"
-        title="Let's work together"
-        subtitle="Open to internships and collaborative projects. If you have an idea, let's turn it into a polished product."
-      />
-      <div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <GlassCard className="p-6 sm:p-8">
-          <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
-            <div className="hidden" aria-hidden="true">
-              <label htmlFor="website">Website</label>
-              <input
-                id="website"
-                name="website"
-                type="text"
-                value={formState.website}
-                onChange={handleInputChange}
-                tabIndex={-1}
-                autoComplete="off"
-              />
-            </div>
+    <section id="contact" data-spy="">
+      <div className="wrap">
+        <div className="reveal">
+          <p className="eyebrow">{t('contact_eyebrow')}</p>
+          <h2>{t('contact_title')}</h2>
+        </div>
 
-            <div>
-              <label htmlFor="name" className="mb-2.5 block text-sm font-medium text-slate-300/90">
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formState.name}
-                onChange={handleInputChange}
-                required
-                className="field-input"
-                placeholder="Your full name"
-              />
-            </div>
+        <div className="contact-grid">
+          {/* Left: info card */}
+          <aside className="card reveal">
+            <h3>Mohammed Yassir Mesbahi</h3>
+            <p className="avail">{t('avail')}</p>
 
-            <div>
-              <label htmlFor="email" className="mb-2.5 block text-sm font-medium text-slate-300/90">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={formState.email}
-                onChange={handleInputChange}
-                required
-                className="field-input"
-                placeholder="client@example.com"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="subject" className="mb-2.5 block text-sm font-medium text-slate-300/90">
-                Subject
-              </label>
-              <input
-                id="subject"
-                name="subject"
-                type="text"
-                value={formState.subject}
-                onChange={handleInputChange}
-                required
-                className="field-input"
-                placeholder="Project inquiry"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="message" className="mb-2.5 block text-sm font-medium text-slate-300/90">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                value={formState.message}
-                onChange={handleInputChange}
-                required
-                className="field-input"
-                placeholder="Tell me about your project and goals..."
-              />
-            </div>
-
-            {status.message ? (
-              <p
-                className={
-                  status.type === "success"
-                    ? "text-sm font-medium text-emerald-300"
-                    : "text-sm font-medium text-rose-300"
-                }
-              >
-                {status.message}
-              </p>
-            ) : null}
-
-            <Button type="submit" className="w-full gap-2.5 sm:w-fit" disabled={isSubmitting}>
-              <Send size={16} />
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
-          </form>
-        </GlassCard>
-        <GlassCard className="relative overflow-hidden p-7 sm:p-9 flex flex-col justify-center">
-          <div className="pointer-events-none absolute -bottom-14 -right-14 h-56 w-56 rounded-full bg-pink-500/[0.06] blur-[64px]" />
-          <h3 className="mt-0 mb-7 text-xl font-semibold tracking-[-0.02em] text-white sm:text-2xl">Contact Details</h3>
-          
-          <div className="space-y-3 relative z-10">
-            <a
-              href="mailto:mesbahi.mohammedyassir.solicode@gmail.com"
-              className="group flex items-center gap-4 break-all rounded-xl border border-transparent p-3.5 text-sm text-slate-300/90 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04] sm:text-base"
-            >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-pink-500/[0.12] text-pink-300 transition-all duration-300 group-hover:bg-pink-500/[0.2] group-hover:text-pink-200 group-hover:scale-105">
-                <Mail size={18} />
+            <div className="mail">
+              <small>{t('mail_lbl')}</small>
+              <div className="mail-row">
+                <code id="email-text">{EMAIL}</code>
+                <button className="mini" type="button" onClick={handleCopy}>
+                  {copyLabel || t('copy')}
+                </button>
               </div>
-              mesbahi.mohammedyassir.solicode@gmail.com
-            </a>
-            <a
-              href="https://github.com/mesbahimohammedyassirsolicode-star"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-4 rounded-xl border border-transparent p-3.5 text-sm text-slate-300/90 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04] sm:text-base"
+              <span className="sr-only" role="status" aria-live="polite">
+                {copyLabel || ''}
+              </span>
+            </div>
+
+            <div className="social">
+              <a href="https://github.com/mesbahimohammedyassirsolicode-star" target="_blank" rel="noopener noreferrer">
+                GitHub ↗
+              </a>
+            </div>
+
+            <p className="contact-note">{t('reply')}</p>
+          </aside>
+
+          {/* Right: form card */}
+          <div className="card reveal">
+            <form
+              id="contact-form"
+              className="contact-form"
+              noValidate
+              onSubmit={handleSubmit}
             >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-500/[0.12] text-indigo-300 transition-all duration-300 group-hover:bg-indigo-500/[0.2] group-hover:text-indigo-200 group-hover:scale-105">
-                <GitBranch size={18} />
+              {/* Honeypot */}
+              <div className="hp" aria-hidden="true">
+                <label>
+                  Website
+                  <input ref={honeypotRef} type="text" name="website" tabIndex="-1" autoComplete="off" />
+                </label>
               </div>
-              GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/mohammed-yassir-mesbahi-600691329/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-4 rounded-xl border border-transparent p-3.5 text-sm text-slate-300/90 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.04] sm:text-base"
-            >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-500/[0.12] text-sky-300 transition-all duration-300 group-hover:bg-sky-500/[0.2] group-hover:text-sky-200 group-hover:scale-105">
-                <BriefcaseBusiness size={18} />
+
+              <div className="two">
+                <div className="field">
+                  <label htmlFor="name">{t('f_name')}</label>
+                  <input
+                    id="name" name="name" type="text" autoComplete="name" required
+                    aria-invalid={errors.name ? 'true' : 'false'}
+                    aria-describedby="name-err"
+                    placeholder={t('ph_name')}
+                    value={fields.name}
+                    onChange={(e) => setFields((f) => ({ ...f, name: e.target.value }))}
+                    onInput={() => setErrors((err) => ({ ...err, name: false }))}
+                  />
+                  <p className="field-err" id="name-err">{t('err_name')}</p>
+                </div>
+                <div className="field">
+                  <label htmlFor="email">{t('f_email')}</label>
+                  <input
+                    id="email" name="email" type="email" autoComplete="email" required
+                    aria-invalid={errors.email ? 'true' : 'false'}
+                    aria-describedby="email-err"
+                    placeholder={t('ph_email')}
+                    value={fields.email}
+                    onChange={(e) => setFields((f) => ({ ...f, email: e.target.value }))}
+                    onInput={() => setErrors((err) => ({ ...err, email: false }))}
+                  />
+                  <p className="field-err" id="email-err">{t('err_email')}</p>
+                </div>
               </div>
-              LinkedIn
-            </a>
+
+              <div className="field">
+                <label htmlFor="subject">{t('f_subject')}</label>
+                <input
+                  id="subject" name="subject" type="text" list="subjects" required
+                  aria-invalid={errors.subject ? 'true' : 'false'}
+                  aria-describedby="subject-err"
+                  placeholder={t('ph_subject')}
+                  value={fields.subject}
+                  onChange={(e) => setFields((f) => ({ ...f, subject: e.target.value }))}
+                  onInput={() => setErrors((err) => ({ ...err, subject: false }))}
+                />
+                <datalist id="subjects">
+                  <option value="Internship offer"/>
+                  <option value="Collaboration"/>
+                  <option value="Other"/>
+                </datalist>
+                <p className="field-err" id="subject-err">{t('err_subject')}</p>
+              </div>
+
+              <div className="field">
+                <label htmlFor="message">{t('f_message')}</label>
+                <textarea
+                  id="message" name="message" rows="5" required
+                  aria-invalid={errors.message ? 'true' : 'false'}
+                  aria-describedby="message-err"
+                  placeholder={t('ph_message')}
+                  value={fields.message}
+                  onChange={(e) => setFields((f) => ({ ...f, message: e.target.value }))}
+                  onInput={() => setErrors((err) => ({ ...err, message: false }))}
+                />
+                <p className="field-err" id="message-err">{t('err_message')}</p>
+              </div>
+
+              {alert && (
+                <div className={`form-alert show ${alert.kind}`} role="status" aria-live="polite">
+                  {alert.kind === 'ok' ? ICON_OK : ICON_BAD}
+                  <span>{alert.msg}</span>
+                </div>
+              )}
+
+              <button className="btn btn-primary" id="submit-btn" type="submit" disabled={sending}>
+                <span id="submit-label">{sending ? t('sending') : t('send')}</span>
+              </button>
+            </form>
           </div>
-        </GlassCard>
+        </div>
       </div>
-    </SectionShell>
+    </section>
   );
 }
 

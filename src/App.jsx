@@ -1,113 +1,122 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Technologies from "./components/Technologies";
-import Skills from "./components/Skills";
-import Tools from "./components/Tools";
+import Stack from "./components/Stack";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
-import SectionDivider from "./components/SectionDivider";
-import useAnimationBudget from "./hooks/useAnimationBudget";
+import { i18n, navItems } from "./data/portfolioData";
 
-const SECTION_IDS = ["home", "about", "technologies", "skills", "tools", "projects", "contact"];
+const SECTION_IDS = navItems.map((n) => n.id); // ['home','about','stack','projects','contact']
 
 function App() {
+  const [lang, setLangState] = useState(() => localStorage.getItem("lang") || "en");
+  const [theme, setThemeState] = useState(() => localStorage.getItem("theme") || "system");
   const [activeSection, setActiveSection] = useState("home");
-  const { shouldLimitMotion } = useAnimationBudget();
 
+  // Translation helper
+  const t = useCallback(
+    (key) => i18n[lang]?.[key] ?? i18n.en[key] ?? key,
+    [lang]
+  );
+
+  // Apply language
+  const handleLangChange = (newLang) => {
+    setLangState(newLang);
+    localStorage.setItem("lang", newLang);
+    document.documentElement.setAttribute("lang", newLang);
+  };
+
+  // Apply theme
+  const applyTheme = useCallback((pref) => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const dark = pref === "dark" || (pref === "system" && mq.matches);
+    document.documentElement.classList.toggle("dark", dark);
+  }, []);
+
+  const handleThemeChange = (newTheme) => {
+    setThemeState(newTheme);
+    localStorage.setItem("theme", newTheme);
+    applyTheme(newTheme);
+  };
+
+  // Listen for system theme changes
   useEffect(() => {
-    const sections = SECTION_IDS
-      .map((id) => document.getElementById(id))
-      .filter((section) => section instanceof HTMLElement);
-    if (!sections.length || typeof IntersectionObserver === "undefined") {
-      return undefined;
-    }
-
-    const visibleSections = new Map();
-    let rafId = 0;
-    const updateActiveSection = () => {
-      const sortedByVisibility = [...visibleSections.entries()].sort((a, b) => b[1] - a[1]);
-      if (!sortedByVisibility.length) {
-        return;
-      }
-      const nextSectionId = sortedByVisibility[0][0];
-      setActiveSection((previousSection) =>
-        previousSection === nextSectionId ? previousSection : nextSectionId
-      );
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const listener = () => {
+      if ((localStorage.getItem("theme") || "system") === "system") applyTheme("system");
     };
+    mq.addEventListener("change", listener);
+    return () => mq.removeEventListener("change", listener);
+  }, [applyTheme]);
 
-    const observer = new IntersectionObserver(
+  // Scroll-spy via IntersectionObserver
+  useEffect(() => {
+    const sections = SECTION_IDS.map((id) => document.getElementById(id)).filter(Boolean);
+    if (!sections.length || !("IntersectionObserver" in window)) return;
+
+    const spy = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting || entry.intersectionRatio <= 0) {
-            visibleSections.delete(entry.target.id);
-            return;
-          }
-          visibleSections.set(entry.target.id, entry.intersectionRatio);
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
-        cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(updateActiveSection);
       },
-      {
-        root: null,
-        rootMargin: "-12% 0px -38% 0px",
-        threshold: [0, 0.1, 0.2, 0.35],
-      }
+      { rootMargin: "-45% 0px -50% 0px" }
     );
+    sections.forEach((s) => spy.observe(s));
+    return () => spy.disconnect();
+  }, []);
 
-    sections.forEach((section) => observer.observe(section));
-
-    const handleScrollBounds = () => {
-      if (window.scrollY <= 4) {
-        setActiveSection((previousSection) => (previousSection === "home" ? previousSection : "home"));
-        return;
-      }
-
-      const documentHeight = document.documentElement.scrollHeight;
-      const viewportBottom = window.scrollY + window.innerHeight;
-      if (viewportBottom >= documentHeight - 6) {
-        setActiveSection((previousSection) =>
-          previousSection === "contact" ? previousSection : "contact"
-        );
-      }
-    };
-
-    window.addEventListener("scroll", handleScrollBounds, { passive: true });
-    handleScrollBounds();
-
-    return () => {
-      window.removeEventListener("scroll", handleScrollBounds);
-      cancelAnimationFrame(rafId);
-      observer.disconnect();
-    };
+  // Reveal animation via IntersectionObserver
+  useEffect(() => {
+    const items = document.querySelectorAll(".reveal");
+    if (!items.length || !("IntersectionObserver" in window)) {
+      items.forEach((el) => el.classList.add("in"));
+      return;
+    }
+    const rv = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            rv.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    items.forEach((el) => rv.observe(el));
+    return () => rv.disconnect();
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-clip">
-      {shouldLimitMotion ? null : (
-        <>
-          <div className="pointer-events-none fixed -right-32 -top-32 z-0 hidden h-80 w-80 rounded-full bg-violet-600/10 blur-3xl lg:block" />
-          <div className="pointer-events-none fixed -bottom-28 -left-24 z-0 hidden h-72 w-72 rounded-full bg-indigo-500/8 blur-3xl lg:block" />
-          <div className="pointer-events-none fixed top-1/2 right-1/4 z-0 hidden h-48 w-48 rounded-full bg-pink-500/5 blur-3xl lg:block" />
-          <div className="bg-grid" />
-        </>
-      )}
-      <Navbar activeSection={activeSection} onSectionChange={setActiveSection} />
-      <Hero />
-      <SectionDivider />
-      <About />
-      <SectionDivider />
-      <Technologies />
-      <SectionDivider />
-      <Skills />
-      <SectionDivider />
-      <Tools />
-      <SectionDivider />
-      <Projects />
-      <SectionDivider />
-      <Contact />
-    </div>
+    <>
+      <a className="skip" href="#main">{t('skip')}</a>
+
+      <Navbar
+        activeSection={activeSection}
+        lang={lang}
+        onLangChange={handleLangChange}
+        theme={theme}
+        onThemeChange={handleThemeChange}
+        t={t}
+      />
+
+      <main id="main">
+        <Hero t={t} />
+        <About t={t} />
+        <Stack t={t} />
+        <Projects t={t} />
+        <Contact t={t} />
+      </main>
+
+      <footer>
+        <div className="wrap">
+          <p>© {new Date().getFullYear()} Mohammed Yassir Mesbahi · Solicode Tangier · Startup MYM</p>
+          <a href="#home">{t('top')}</a>
+        </div>
+      </footer>
+    </>
   );
 }
 
