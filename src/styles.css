@@ -5,61 +5,75 @@
    ============================================================ */
 :root {
   color-scheme: light;
-  --bg: #FFFFFF;
-  --card: #FFFFFF;
-  --subtle: #F4F4F4;
-  --line: #E3E3E3;
-  --line-input: #767676;
-  --line-hover: rgba(0, 0, 0, .6);
-  --ink: #0A0A0A;
+  --bg: #ffffff;
+  --panel: #fafafa;
+  --surface: #f4f4f5;
+  --surface-hi: #ececee;
+  --raised: rgba(0, 0, 0, .015);
+  --line: rgba(0, 0, 0, .09);
+  --line-subtle: rgba(0, 0, 0, .055);
+  --line-input: rgba(0, 0, 0, .16);
+  --ink: #0a0a0a;
   --ink2: #404040;
-  --muted: #595959;
-  --btn: #0A0A0A;
-  --btn-txt: #FFFFFF;
-  --accent: #0A0A0A;
-  --accent-soft: rgba(0, 0, 0, .06);
-  --ok-bg: #F0F0F0;
-  --ok: #0A0A0A;
-  --err-bg: #F0F0F0;
-  --err: #0A0A0A;
-  --mym-line: rgba(255, 255, 255, .4);
-  --nav: rgba(255, 255, 255, .88);
-  --shadow: 0 14px 34px -14px rgba(0, 0, 0, .28);
-  --phone: #0A0A0A;
-  --pattern: .45;
-  --font-display: 'Outfit', system-ui, sans-serif;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --muted: #6b7280;
+  --faint: #9ca3af;
+  --accent: var(--ink);
+  --ok: #15803d;
+  --ok-bg: #f0fdf4;
+  --err: #b91c1c;
+  --err-bg: #fef2f2;
+  --nav: rgba(255, 255, 255, .82);
+  --mym-line: rgba(0, 0, 0, .12);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px -12px rgba(0, 0, 0, .10);
+  --r-badge: 2px;
+  --r-control: 6px;
+  --r-card: 8px;
+  --r-panel: 12px;
+  --r-full: 999px;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --dur-reveal: 720ms;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Legacy aliases — map the pre-redesign token names onto the new system so
+     that no `var()` dangles while Tasks 4-9 restyle components one at a time.
+     Every one of these is deleted in Task 13 Step 7, once nothing references
+     them. Do not give them new usages. */
+  --btn: var(--ink);
+  --btn-txt: var(--bg);
+  --card: var(--surface);
+  --subtle: var(--surface-hi);
+  --accent-soft: var(--surface-hi);
+  --line-hover: var(--ink);
+  --font-display: var(--font-sans);
+  --phone: var(--line-input);
+  --pattern: .35;
 }
 
 .dark {
   color-scheme: dark;
-  --bg: #0A0A0A;
-  --card: #141414;
-  --subtle: rgba(255, 255, 255, .05);
-  --line: rgba(255, 255, 255, .14);
-  --line-input: #7A7A7A;
-  --line-hover: rgba(255, 255, 255, .65);
-  --ink: #FAFAFA;
-  --ink2: #A8A8A8;
-  --muted: #8F8F8F;
-  --btn: #FAFAFA;
-  --btn-txt: #0A0A0A;
-  --accent: #FAFAFA;
-  --accent-soft: rgba(255, 255, 255, .08);
-  --ok-bg: #1C1C1C;
-  --ok: #FAFAFA;
-  --err-bg: #1C1C1C;
-  --err: #FAFAFA;
-  --mym-line: rgba(0, 0, 0, .35);
-  --nav: rgba(10, 10, 10, .88);
-  --shadow: 0 18px 40px -16px rgba(0, 0, 0, .85);
-  --phone: #2A2A2A;
-  --pattern: .35;
+  --bg: #08090a;
+  --panel: #0f1011;
+  --surface: #191a1b;
+  --surface-hi: #28282c;
+  --raised: rgba(255, 255, 255, .02);
+  --line: rgba(255, 255, 255, .08);
+  --line-subtle: rgba(255, 255, 255, .05);
+  --line-input: rgba(255, 255, 255, .14);
+  --ink: #f7f8f8;
+  --ink2: #d0d6e0;
+  --muted: #8a8f98;
+  --faint: #62666d;
+  --accent: var(--ink);
+  --ok: #27a644;
+  --ok-bg: rgba(39, 166, 68, .12);
+  --err: #e5484d;
+  --err-bg: rgba(229, 72, 77, .12);
+  --nav: rgba(8, 9, 10, .82);
+  --mym-line: rgba(255, 255, 255, .12);
+  --shadow: none;
 }
 
-/* ============================================================
-   RESET + BASE
-   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -68,20 +82,22 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Carried over verbatim from the current stylesheet. Do NOT drop this block:
+   Task 12 extends it, and the scroll-behavior override is load-bearing for
+   reduced-motion users. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .phone { transform: none; }
-  .track { width: auto; flex-wrap: wrap; }
 }
 
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--ink);
+  color: var(--ink2);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.65;
+  font-feature-settings: "cv01", "ss03";
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -93,10 +109,12 @@ img, svg { display: block; max-width: 100%; }
 button, input, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; background: none; border: 0; padding: 0; }
 
-::selection { background: rgba(128, 128, 128, .3); }
-:focus-visible { outline: 2px solid var(--btn); outline-offset: 3px; border-radius: 4px; }
-::placeholder { color: var(--muted); opacity: 1; }
+::selection { background: var(--surface-hi); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: var(--r-badge); }
+::placeholder { color: var(--faint); opacity: 1; }
 
+/* Load-bearing: Contact.jsx renders the copy-email live region with this
+   class. Without it the screen-reader announcement becomes visible page text. */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -106,34 +124,29 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
   white-space: nowrap;
 }
 
-/* ============================================================
-   LAYOUT UTILITIES
-   ============================================================ */
-.wrap {
-  width: min(1160px, 100% - 2rem);
-  margin-inline: auto;
-}
+.wrap { width: min(1200px, 100% - 2rem); margin-inline: auto; }
+@media (min-width: 640px) { .wrap { width: min(1200px, 100% - 3rem); } }
 
-@media (min-width: 640px) {
-  .wrap { width: min(1160px, 100% - 3rem); }
-}
-
-section { padding-block: clamp(4.5rem, 9vw, 7.5rem); }
+section { padding-block: clamp(4.5rem, 9vw, 7.5rem); perspective: 1200px; }
 
 .eyebrow {
   font-size: .75rem;
-  font-weight: 700;
+  font-weight: 510;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--muted);
+}
+
+h1, h2, h3 {
+  color: var(--ink);
+  font-weight: 510;
+  text-wrap: balance;
 }
 
 h2 {
-  font-family: var(--font-display);
-  font-weight: 700;
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 1.05;
-  letter-spacing: -.03em;
+  letter-spacing: -.02em;
   margin-top: .6rem;
   max-width: 18ch;
 }
@@ -142,6 +155,7 @@ h2 {
   color: var(--ink2);
   font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
   line-height: 1.7;
+  max-width: 65ch;
 }
 
 /* ============================================================
