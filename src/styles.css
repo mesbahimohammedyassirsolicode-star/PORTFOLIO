@@ -231,7 +231,7 @@ header.top.scrolled {
 .logo:hover { opacity: .75; }
 
 nav.desktop { display: none; gap: .125rem; }
-nav.desktop a {
+nav.desktop button {
   position: relative;
   padding: .5rem .75rem;
   font-size: .8125rem;
@@ -244,9 +244,9 @@ nav.desktop a {
   border: 0;
   cursor: pointer;
 }
-nav.desktop a:hover { color: var(--ink); }
-nav.desktop a[aria-current] { color: var(--ink); }
-nav.desktop a[aria-current]::after {
+nav.desktop button:hover { color: var(--ink); }
+nav.desktop button[aria-current] { color: var(--ink); }
+nav.desktop button[aria-current]::after {
   content: "";
   position: absolute;
   left: .75rem;
@@ -322,7 +322,7 @@ nav.desktop a[aria-current]::after {
   padding: 1.5rem 1rem;
   overflow-y: auto;
 }
-.mobile-nav a {
+.mobile-nav button {
   display: flex;
   align-items: center;
   width: 100%;
@@ -337,7 +337,7 @@ nav.desktop a[aria-current]::after {
   text-align: left;
   cursor: pointer;
 }
-.mobile-nav a[aria-current] { color: var(--ink); font-weight: 590; }
+.mobile-nav button[aria-current] { color: var(--ink); font-weight: 590; }
 
 @media (min-width: 640px) { .cv-link { display: inline-flex; } }
 @media (min-width: 900px) {
