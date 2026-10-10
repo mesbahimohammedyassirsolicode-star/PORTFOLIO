@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
@@ -12,7 +11,7 @@ export default defineConfig(({ command }) => {
     "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.emailjs.com; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests";
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react()],
     build: {
       target: "es2020",
       cssCodeSplit: true,
@@ -21,12 +20,6 @@ export default defineConfig(({ command }) => {
           manualChunks(id) {
             if (id.includes("node_modules/react") || id.includes("node_modules/react-dom")) {
               return "react-vendor";
-            }
-            if (id.includes("node_modules/framer-motion")) {
-              return "motion-vendor";
-            }
-            if (id.includes("node_modules/lucide-react")) {
-              return "icons-vendor";
             }
             return undefined;
           },
