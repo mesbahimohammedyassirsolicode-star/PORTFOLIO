@@ -1,4 +1,4 @@
-// MYM Logo SVG — M letters use currentColor, Y is always #F5C300
+// MYM Logo SVG — all glyphs use currentColor so the wordmark inherits theme colour
 export function MymLogo({ height = 36 }) {
   return (
     <svg
@@ -29,14 +29,14 @@ export function MymLogo({ height = 36 }) {
         fill="currentColor"
       >M</text>
 
-      {/* Y — always gold */}
+      {/* Y */}
       <text
         x="77"
         y="60"
         fontFamily="'Outfit', system-ui, sans-serif"
         fontWeight="700"
         fontSize="68"
-        fill="#F5C300"
+        fill="currentColor"
       >Y</text>
 
       {/* MAKE YOUR MOVE tagline */}

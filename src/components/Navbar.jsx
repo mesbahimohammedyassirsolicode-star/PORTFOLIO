@@ -52,7 +52,6 @@ function Navbar({ activeSection, lang, onLangChange, theme, onThemeChange, t }) 
           className="logo"
           onClick={() => scrollTo('home')}
           aria-label="MYM — back to top"
-          style={{ background: 'none', border: 0 }}
         >
           <MymLogo height={38} />
         </button>
