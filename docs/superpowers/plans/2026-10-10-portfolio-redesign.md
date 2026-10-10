@@ -97,8 +97,10 @@ describe("project assets", () => {
   it.each(projects.map((p) => [p.id, p.img]))(
     "%s resolves to a file under public/",
     (_id, img) => {
-      const rel = img.replace(/^assets\/projects\//, "");
-      expect(fs.existsSync(path.join(PUBLIC, rel))).toBe(true);
+      // No normalisation: `img` must resolve under public/ exactly as written.
+      // Stripping an `assets/projects/` prefix here would strip the very defect
+      // this test exists to catch, making the assertion vacuously true.
+      expect(fs.existsSync(path.join(PUBLIC, img))).toBe(true);
     }
   );
 });
@@ -126,7 +128,9 @@ describe("i18n", () => {
 - [ ] **Step 4: Run the tests and confirm they fail for the expected reasons**
 
 Run: `npm test`
-Expected: FAIL. Seven failures — five from `resolves to a file under public/` (every `img` is prefixed `assets/projects/`), and one from `missingFr`/`missingEn` naming `lbl_filter`. The `en`/`fr` parity test passes; that is correct, not a mistake.
+Expected: FAIL, with **six** failures — five from `resolves to a file under public/` (every `img` is prefixed `assets/projects/`, so it resolves to `public/assets/projects/...`, which does not exist) and one naming `lbl_filter` as missing from both dictionaries. The `en`/`fr` parity test passes; that is correct, not a mistake.
+
+If the five asset tests PASS, the assertion has been weakened — most likely a normalisation like `img.replace(/^assets\/projects\//, "")` crept in, which would strip the defect and make the check vacuously true. The assertion must use `img` exactly as written.
 
 - [ ] **Step 5: Add tests to CI**
 
