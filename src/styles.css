@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   TOKEN SYSTEM — matches p01-accueil.html exactly
+   TOKEN SYSTEM — achromatic luminance scale, dark is native
    ============================================================ */
 :root {
   color-scheme: light;
@@ -16,7 +16,7 @@
   --ink: #0a0a0a;
   --ink2: #404040;
   --muted: #6b7280;
-  --faint: #9ca3af;
+  --faint: #656e7d;
   --accent: var(--ink);
   --ok: #15803d;
   --ok-bg: #f0fdf4;
@@ -63,7 +63,7 @@
   --ink: #f7f8f8;
   --ink2: #d0d6e0;
   --muted: #8a8f98;
-  --faint: #62666d;
+  --faint: #7d828a;
   --accent: var(--ink);
   --ok: #27a644;
   --ok-bg: rgba(39, 166, 68, .12);

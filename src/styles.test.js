@@ -14,6 +14,11 @@ const dark = tokensIn(/\.dark\s*\{([^}]*)\}/g);
 const used = new Set([...css.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]));
 
 describe("css tokens", () => {
+  it("parses a non-empty :root and .dark token surface", () => {
+    expect(root.size).toBeGreaterThan(0);
+    expect(dark.size).toBeGreaterThan(0);
+  });
+
   it("defines every referenced var() in :root", () => {
     expect([...used].filter((v) => !root.has(v))).toEqual([]);
   });
