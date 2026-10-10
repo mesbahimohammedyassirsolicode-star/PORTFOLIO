@@ -28,6 +28,7 @@ function Stack({ t }) {
           <ul className="core">
             {core.map(({ name, key }) => (
               <li key={name} className="tile card-spotlight">
+                <span className="spotlight-glow" aria-hidden="true" />
                 <strong>{name}</strong>
                 <span>{t(key)}</span>
               </li>

@@ -25,6 +25,7 @@ function About({ t }) {
         <div className="about-grid">
           {/* MYM startup card (inverted) */}
           <article className="card card-spotlight mym reveal">
+            <span className="spotlight-glow" aria-hidden="true" />
             <span className="tag">{t('mym_tag')}</span>
             <h3>Startup MYM</h3>
             <p>{t('mym_desc')}</p>
@@ -33,6 +34,7 @@ function About({ t }) {
 
           {/* Journey timeline */}
           <article className="card card-spotlight reveal">
+            <span className="spotlight-glow" aria-hidden="true" />
             <h3>{t('tl_title')}</h3>
             <ul className="timeline">
               <li>
@@ -56,6 +58,7 @@ function About({ t }) {
 
           {/* Engineering mindset (full row) */}
           <article className="card card-spotlight reveal full-row">
+            <span className="spotlight-glow" aria-hidden="true" />
             <h3>{t('mind_title')}</h3>
             <ul className="ticks">
               <li>{t('mind1')}</li>

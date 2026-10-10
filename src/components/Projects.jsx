@@ -52,6 +52,7 @@ function Projects({ t }) {
                 className={`project reveal card-spotlight${idx === 0 ? ' featured' : ''}`}
                 data-cat={proj.cat}
               >
+                <span className="spotlight-glow" aria-hidden="true" />
                 <div className="visual">
                   <img
                     src={proj.img}

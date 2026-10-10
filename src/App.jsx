@@ -6,6 +6,8 @@ import Stack from "./components/Stack";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import { i18n, navItems } from "./data/portfolioData";
+import useAnimationBudget from "./hooks/useAnimationBudget";
+import useSpotlight from "./hooks/useSpotlight";
 
 const SECTION_IDS = navItems.map((n) => n.id); // ['home','about','stack','projects','contact']
 
@@ -19,6 +21,14 @@ function App() {
     (key) => i18n[lang]?.[key] ?? i18n.en[key] ?? key,
     [lang]
   );
+
+  const { shouldLimitMotion } = useAnimationBudget();
+  useSpotlight();
+
+  // Motion capability gate: touch, low-power and reduced-motion all get the flat reveal
+  useEffect(() => {
+    document.documentElement.dataset.motion = shouldLimitMotion ? "flat" : "3d";
+  }, [shouldLimitMotion]);
 
   // Apply language
   const handleLangChange = (newLang) => {
