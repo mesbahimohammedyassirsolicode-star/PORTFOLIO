@@ -27,7 +27,7 @@ function Stack({ t }) {
           <h3>{t('g_core')}</h3>
           <ul className="core">
             {core.map(({ name, key }) => (
-              <li key={name} className="tile">
+              <li key={name} className="tile card-spotlight">
                 <strong>{name}</strong>
                 <span>{t(key)}</span>
               </li>
