@@ -2,7 +2,7 @@ import { memo, useState, useMemo } from "react";
 import { projects } from "../data/portfolioData";
 
 const CATEGORIES = ['all', 'fullstack', 'frontend'];
-const CAT_LABEL_KEY = { all: 'filter_all', fullstack: 'filter_fullstack', frontend: 'filter_frontend', mobile: 'filter_mobile' };
+const CAT_LABEL_KEY = { all: 'filter_all', fullstack: 'filter_fullstack', frontend: 'filter_frontend' };
 
 function Projects({ t }) {
   const [filter, setFilter] = useState('all');
@@ -18,7 +18,7 @@ function Projects({ t }) {
     : t('count_many').replace('{n}', visible.length);
 
   return (
-    <section id="projects" data-spy="">
+    <section id="projects">
       <div className="wrap">
         <div className="proj-head reveal">
           <div>
@@ -50,7 +50,6 @@ function Projects({ t }) {
               <article
                 key={proj.id}
                 className={`project reveal card-spotlight${idx === 0 ? ' featured' : ''}`}
-                data-cat={proj.cat}
               >
                 <span className="spotlight-glow" aria-hidden="true" />
                 <div className="visual">

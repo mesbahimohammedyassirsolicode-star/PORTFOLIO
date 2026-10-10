@@ -3,7 +3,7 @@ import { memo } from "react";
 // About section — matches p01-accueil.html About + MYM + Journey + Mindset structure
 function About({ t }) {
   return (
-    <section id="about" data-spy="">
+    <section id="about">
       <div className="wrap">
         {/* Intro row */}
         <div className="about-intro reveal">

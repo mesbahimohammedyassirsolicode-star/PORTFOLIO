@@ -15,7 +15,7 @@ function Stack({ t }) {
   const workflow = ['Git & GitHub', 'Android Studio', 'Cursor', 'AI agentic workflows', 'n8n', 'Microsoft 365', 'Sage'];
 
   return (
-    <section id="stack" data-spy="">
+    <section id="stack">
       <div className="wrap">
         <div className="reveal">
           <p className="eyebrow">{t('stack_eyebrow')}</p>

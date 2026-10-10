@@ -51,7 +51,3 @@ export function AnimationBudgetProvider({ children }) {
 export default function useAnimationBudget() {
   return useContext(AnimationBudgetContext);
 }
-
-export function useAnimationBudgetContext() {
-  return useContext(AnimationBudgetContext);
-}

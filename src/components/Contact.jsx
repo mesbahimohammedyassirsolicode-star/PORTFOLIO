@@ -101,7 +101,7 @@ function Contact({ t }) {
   };
 
   return (
-    <section id="contact" data-spy="">
+    <section id="contact">
       <div className="wrap">
         <div className="reveal">
           <p className="eyebrow">{t('contact_eyebrow')}</p>
@@ -110,14 +110,15 @@ function Contact({ t }) {
 
         <div className="contact-grid">
           {/* Left: info card */}
-          <aside className="card reveal">
+          <aside className="card card-spotlight reveal">
+            <span className="spotlight-glow" aria-hidden="true" />
             <h3>Mohammed Yassir Mesbahi</h3>
             <p className="avail">{t('avail')}</p>
 
             <div className="mail">
               <small>{t('mail_lbl')}</small>
               <div className="mail-row">
-                <code id="email-text">{EMAIL}</code>
+                <code>{EMAIL}</code>
                 <button className="mini" type="button" onClick={handleCopy}>
                   {copyLabel || t('copy')}
                 </button>
@@ -137,7 +138,8 @@ function Contact({ t }) {
           </aside>
 
           {/* Right: form card */}
-          <div className="card reveal">
+          <div className="card card-spotlight reveal">
+            <span className="spotlight-glow" aria-hidden="true" />
             <form
               id="contact-form"
               className="contact-form"

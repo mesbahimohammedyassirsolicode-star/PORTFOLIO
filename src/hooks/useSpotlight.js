@@ -10,14 +10,18 @@ export default function useSpotlight() {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const cards = document.querySelectorAll(".card-spotlight");
+    // Cards can mount after this effect runs (Projects re-renders new DOM nodes
+    // on filter change), so track .card-spotlight nodes as they appear and bind
+    // each exactly once. Without this, re-mounted cards keep a .spotlight-glow
+    // that never follows the pointer.
+    const bound = new WeakSet();
     const cleanupFns = [];
+    let rafId = null;
 
-    cards.forEach((card) => {
+    const bindCard = (card) => {
       const glow = card.querySelector(".spotlight-glow");
-      if (!glow) return;
-
-      let rafId = null;
+      if (!glow || bound.has(card)) return;
+      bound.add(card);
 
       const updatePosition = (e) => {
         const rect = card.getBoundingClientRect();
@@ -47,11 +51,29 @@ export default function useSpotlight() {
         card.removeEventListener("pointerenter", handleEnter);
         card.removeEventListener("pointermove", handleMove);
         card.removeEventListener("pointerleave", handleLeave);
-        if (rafId) cancelAnimationFrame(rafId);
+      });
+    };
+
+    const bindAll = (root) => {
+      root.querySelectorAll(".card-spotlight").forEach(bindCard);
+    };
+
+    bindAll(document);
+
+    const mo = new MutationObserver((records) => {
+      records.forEach((record) => {
+        record.addedNodes.forEach((node) => {
+          if (node.nodeType !== Node.ELEMENT_NODE) return;
+          if (node.matches?.(".card-spotlight")) bindCard(node);
+          bindAll(node);
+        });
       });
     });
+    mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      mo.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
       cleanupFns.forEach((fn) => fn());
     };
   }, []);

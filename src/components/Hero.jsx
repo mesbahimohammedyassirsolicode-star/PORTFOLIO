@@ -2,7 +2,7 @@ import { memo } from "react";
 
 function Hero({ t }) {
   return (
-    <section className="hero" id="home" data-spy="">
+    <section className="hero" id="home">
       <div className="wrap hero-grid">
         <div>
           <p className="badge">

@@ -77,12 +77,15 @@ function App() {
     return () => spy.disconnect();
   }, []);
 
-  // Reveal animation via IntersectionObserver
+  // Reveal animation via IntersectionObserver.
+  // The observer watches for newly-mounted .reveal nodes as well, because
+  // components such as Projects re-render brand-new DOM nodes on filter change
+  // and those nodes never receive the imperative `.in` class otherwise.
   useEffect(() => {
-    const items = document.querySelectorAll(".reveal");
-    if (!items.length || !("IntersectionObserver" in window)) {
-      items.forEach((el) => el.classList.add("in"));
-      return;
+    const revealAll = () => document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
+    if (!("IntersectionObserver" in window)) {
+      revealAll();
+      return undefined;
     }
     const rv = new IntersectionObserver(
       (entries) => {
@@ -95,8 +98,16 @@ function App() {
       },
       { threshold: 0.12 }
     );
-    items.forEach((el) => rv.observe(el));
-    return () => rv.disconnect();
+    const observePending = () => {
+      document.querySelectorAll(".reveal:not(.in)").forEach((el) => rv.observe(el));
+    };
+    observePending();
+    const mo = new MutationObserver(observePending);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      rv.disconnect();
+      mo.disconnect();
+    };
   }, []);
 
   return (
