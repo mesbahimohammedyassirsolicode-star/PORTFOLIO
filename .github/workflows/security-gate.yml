@@ -29,3 +29,6 @@ jobs:
 
       - name: Enforce security headers baseline
         run: npm run security:headers
+
+      - name: Run unit tests
+        run: npm test
