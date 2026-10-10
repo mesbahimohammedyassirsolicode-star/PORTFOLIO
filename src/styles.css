@@ -490,7 +490,7 @@ h1 .dot-end { color: var(--muted); }
   text-transform: uppercase;
   color: var(--muted);
 }
-.mym h3 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); letter-spacing: -.03em; margin-top: 1rem; }
+.mym h3 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1; letter-spacing: -.03em; margin-top: 1rem; }
 .mym p { margin-top: .75rem; color: var(--ink2); max-width: 30rem; }
 .mym .status { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--mym-line); font-weight: 510; font-size: .875rem; color: var(--ink); }
 
