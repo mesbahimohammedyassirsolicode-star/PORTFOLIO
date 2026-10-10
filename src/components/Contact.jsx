@@ -17,7 +17,7 @@ function Contact({ t }) {
   const [fields, setFields] = useState({ name: '', email: '', subject: '', message: '' });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState(null); // { kind: 'ok'|'bad', msg }
-  const [sending, setSending] = useState(false);
+  const [, setSending] = useState(false);
   const [copyLabel, setCopyLabel] = useState(null);
   const honeypotRef = useRef(null);
 
@@ -221,9 +221,10 @@ function Contact({ t }) {
                 </div>
               )}
 
-              <button className="btn btn-primary" id="submit-btn" type="submit" disabled={sending}>
-                <span id="submit-label">{sending ? t('sending') : t('send')}</span>
+              <button className="btn btn-primary" id="submit-btn" type="submit" disabled>
+                <span id="submit-label">{t('send')}</span>
               </button>
+              <p className="form-note">{t('form_unconfigured')}</p>
             </form>
           </div>
         </div>

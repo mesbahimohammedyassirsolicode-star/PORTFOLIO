@@ -636,56 +636,89 @@ h1 .dot-end { color: var(--muted); }
 /* ============================================================
    CONTACT
    ============================================================ */
-.contact-grid { display: grid; gap: 1.25rem; margin-top: 2.5rem; }
+.contact-grid { display: grid; gap: 1rem; margin-top: 2.5rem; }
 @media (min-width: 960px) { .contact-grid { grid-template-columns: .85fr 1.15fr; align-items: start; } }
 
-.avail { display: inline-block; margin-top: .6rem; font-size: .9375rem; font-weight: 600; color: var(--ok); }
+aside.card { background: var(--panel); border-color: var(--line-subtle); border-radius: var(--r-panel); }
 
-.mail { margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--line); border-radius: 16px; background: var(--subtle); }
-.mail small { display: block; font-size: .8125rem; color: var(--muted); font-weight: 500; }
-.mail .mail-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-top: .35rem; }
-.mail code { font-family: inherit; font-weight: 600; font-size: .9375rem; overflow-wrap: anywhere; }
+.avail { display: inline-block; margin-top: .5rem; font-size: .875rem; font-weight: 510; color: var(--ink); }
 
-.mini { min-height: 40px; padding: .35rem .9rem; border: 1px solid var(--line-input); border-radius: 999px; background: var(--card); font-size: .8125rem; font-weight: 600; flex: none; color: var(--ink); }
-.mini:hover { border-color: var(--btn); }
+.mail { margin-top: 1.5rem; padding: .875rem; border: 1px solid var(--line); border-radius: var(--r-control); background: var(--surface); }
+.mail small { display: block; font-size: .75rem; color: var(--muted); font-weight: 510; }
+.mail .mail-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-top: .375rem; }
+.mail code { font-family: var(--font-mono); font-size: .8125rem; font-weight: 510; color: var(--ink); overflow-wrap: anywhere; }
 
-.social { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.25rem; }
-.social a { display: inline-flex; align-items: center; min-height: 44px; padding: .5rem 1.1rem; border: 1px solid var(--line-input); border-radius: 999px; font-size: .875rem; font-weight: 600; }
-.social a:hover { border-color: var(--btn); }
+.mini {
+  min-height: 32px;
+  padding: .25rem .625rem;
+  border: 1px solid var(--line-input);
+  border-radius: var(--r-control);
+  background: var(--raised);
+  font-size: .75rem;
+  font-weight: 510;
+  color: var(--ink);
+  flex: none;
+  transition: border-color .2s, background .2s;
+}
+.mini:hover { border-color: var(--ink); background: var(--surface-hi); }
+
+.social { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.25rem; }
+.social a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: .5rem .875rem;
+  border: 1px solid var(--line-input);
+  border-radius: var(--r-control);
+  background: var(--raised);
+  font-size: .8125rem;
+  font-weight: 510;
+  transition: border-color .2s, background .2s;
+}
+.social a:hover { border-color: var(--ink); background: var(--surface-hi); }
 
 .contact-note { margin-top: 1.25rem; font-size: .8125rem; color: var(--muted); }
 
-.contact-form { display: grid; gap: 1.1rem; }
-.two { display: grid; gap: 1.1rem; }
+.contact-form { display: grid; gap: 1rem; }
+.two { display: grid; gap: 1rem; }
 @media (min-width: 560px) { .two { grid-template-columns: 1fr 1fr; } }
 
-.field label { display: block; font-size: .875rem; font-weight: 600; color: var(--ink2); margin-bottom: .4rem; }
-.field input, .field textarea { width: 100%; padding: .8rem 1rem; border: 1px solid var(--line-input); border-radius: 14px; background: var(--subtle); font-size: 1rem; transition: border-color .2s, box-shadow .2s; }
+.field label { display: block; font-size: .8125rem; font-weight: 510; color: var(--ink2); margin-bottom: .375rem; }
+.field input, .field textarea {
+  width: 100%;
+  padding: .6875rem .875rem;
+  border: 1px solid var(--line-input);
+  border-radius: var(--r-control);
+  background: var(--surface-hi);
+  font-size: .9375rem;
+  transition: border-color .2s, box-shadow .2s;
+}
 .field textarea { resize: vertical; min-height: 8.5rem; }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--btn); box-shadow: 0 0 0 3px rgba(128, 128, 128, .35); }
-.field [aria-invalid="true"] { border-color: var(--err); border-width: 2px; }
+.field input:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 20%, transparent);
+}
+.field [aria-invalid="true"] { border-color: var(--err); }
 
-.field-err { display: none; align-items: center; gap: .4rem; margin-top: .4rem; font-size: .8125rem; font-weight: 500; color: var(--err); }
-.field-err::before { content: "✕"; font-weight: 700; }
+.field-err { display: none; align-items: center; gap: .375rem; margin-top: .375rem; font-size: .75rem; font-weight: 510; color: var(--err); }
+.field-err::before { content: "\2715"; }
 .field [aria-invalid="true"] ~ .field-err { display: flex; }
 
-.form-alert { display: none; align-items: flex-start; gap: .6rem; padding: .9rem 1rem; border-radius: 14px; font-size: .9375rem; font-weight: 500; border: 1px solid currentColor; }
+.form-alert { display: none; align-items: flex-start; gap: .5rem; padding: .75rem .875rem; border-radius: var(--r-control); font-size: .875rem; border: 1px solid currentColor; }
 .form-alert.show { display: flex; }
 .form-alert.ok { background: var(--ok-bg); color: var(--ok); }
-.form-alert.bad { background: var(--err-bg); color: var(--err); border-width: 2px; border-style: dashed; }
-.form-alert svg { width: 1.1rem; height: 1.1rem; flex: none; margin-top: .2rem; }
+.form-alert.bad { background: var(--err-bg); color: var(--err); }
+.form-alert svg { width: 1rem; height: 1rem; flex: none; margin-top: .1875rem; }
+
+.form-note { font-size: .75rem; color: var(--muted); }
 
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
 /* ============================================================
    FOOTER
    ============================================================ */
-footer {
-  border-top: 1px solid var(--line);
-  padding-block: 2rem;
-  font-size: .875rem;
-  color: var(--muted);
-}
+footer { border-top: 1px solid var(--line-subtle); padding-block: 2rem; font-size: .8125rem; color: var(--muted); }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
 footer a:hover { color: var(--ink); }
 
