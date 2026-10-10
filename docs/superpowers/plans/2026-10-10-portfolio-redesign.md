@@ -341,6 +341,14 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Carried over verbatim from the current stylesheet. Do NOT drop this block:
+   Task 12 extends it, and the scroll-behavior override is load-bearing for
+   reduced-motion users. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -363,6 +371,17 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 ::selection { background: var(--surface-hi); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: var(--r-badge); }
 ::placeholder { color: var(--faint); opacity: 1; }
+
+/* Load-bearing: Contact.jsx renders the copy-email live region with this
+   class. Without it the screen-reader announcement becomes visible page text. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 
 .wrap { width: min(1200px, 100% - 2rem); margin-inline: auto; }
 @media (min-width: 640px) { .wrap { width: min(1200px, 100% - 3rem); } }
@@ -399,7 +418,15 @@ h2 {
 }
 ```
 
-`perspective` on `section` establishes the depth field for the Task 11 reveals.
+The replaced region spans `src/styles.css:60-147`, which also contains the reduced-motion media query and `.sr-only`. Both are reproduced in the block above; after the edit, confirm one occurrence of `.sr-only` and one of `@media (prefers-reduced-motion: reduce)` survive, using:
+
+```bash
+grep -c "sr-only" src/styles.css; grep -c "prefers-reduced-motion" src/styles.css
+```
+
+Expected after Task 3: `1` and `1`. A `0` means a load-bearing rule was dropped — restore it before continuing.
+
+`perspective` on `section` establishes the depth field for the Task 12 reveals.
 
 - [ ] **Step 5: Run tests, lint and build**
 
@@ -781,7 +808,9 @@ h1 .dot-end { color: var(--muted); }
 
 - [ ] **Step 4: Delete the dead hero CSS**
 
-Remove every rule for `.phone`, `.phone-wrap`, `.phone::before`, `.ph-head`, `.ph-card`, `.ph-row`, `.ph-tabs`, `.caption`, `@keyframes float`, `.marquee`, `.track`, and `@keyframes slide`. Also drop `--phone` and `--pattern` from both token blocks if still present.
+Remove every rule for `.phone`, `.phone-wrap`, `.phone::before`, `.ph-head`, `.ph-card`, `.ph-row`, `.ph-tabs`, `.caption`, `@keyframes float`, `.marquee`, `.track`, and `@keyframes slide`.
+
+Do **not** remove the `--phone` and `--pattern` aliases from the token block here, even though this task removes their last references. Task 13 Step 7 removes all nine legacy aliases in one place; splitting that removal across two tasks invites an orphaned `var()`. Leave them.
 
 - [ ] **Step 5: Verify**
 
@@ -1463,7 +1492,7 @@ If a section's markup does not match, correct the selector rather than deleting 
 
 - [ ] **Step 3: Extend the reduced-motion block**
 
-The existing block at `src/styles.css:71-76` sets `animation: none !important`, which would leave `.reveal` at `opacity: 0` forever, because the reveal is driven by a JS-added `.in` class rather than only by CSS. Add an explicit forcing rule so reduced-motion users see content immediately:
+The reduced-motion block written in Task 3 sets `animation: none !important`, which would leave `.reveal` at `opacity: 0` forever, because the reveal is driven by a JS-added `.in` class rather than only by CSS. Extend that block with an explicit forcing rule so reduced-motion users see content immediately:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
