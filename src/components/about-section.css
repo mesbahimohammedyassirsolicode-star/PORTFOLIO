@@ -1,0 +1,253 @@
+/* ============================================================
+   ABOUT — section scope
+   A 12-column editorial grid on desktop (two measures), collapsing
+   to a single natural reading order on mobile.
+   Namespaced under .about-section; no absolute positioning is used
+   for the content layout.
+   ============================================================ */
+
+.about-section { position: relative; }
+
+/* Very faint local grid so the section sits on a deliberate surface. */
+.about-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(231, 198, 0, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(231, 198, 0, .035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(72% 58% at 40% 32%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(72% 58% at 40% 32%, #000 0%, transparent 78%);
+}
+.about-section > .wrap { position: relative; z-index: 1; }
+
+/* ---------------- Layout ----------------
+   Mobile first: one column in DOM order —
+   heading, introduction, philosophy, metadata, technical, learning. */
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.75rem;
+}
+.about-grid > * { min-width: 0; }
+
+/* Tablet — two comfortable measures, nothing squeezed. */
+@media (min-width: 640px) {
+  .about-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.75rem;
+    grid-template-areas:
+      "head   head"
+      "intro  intro"
+      "philo  meta"
+      "tech   learn"
+      "tags   tags";
+  }
+  .about-head   { grid-area: head; }
+  .about-intro  { grid-area: intro; }
+  .about-philosophy { grid-area: philo; }
+  .about-meta   { grid-area: meta; }
+  .about-tech   { grid-area: tech; }
+  .about-learning { grid-area: learn; }
+  .about-tags   { grid-area: tags; }
+}
+
+/* Desktop — a wide lead measure against a narrower utility rail. */
+@media (min-width: 1024px) {
+  .about-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 2.75rem 2.5rem;
+    grid-template-areas:
+      "head  head  head  head  head  head  head  philo philo philo philo philo"
+      "intro intro intro intro intro intro intro meta  meta  meta  meta  meta"
+      "tech  tech  tech  tech  tech  tech  learn learn learn learn learn learn"
+      "tags  tags  tags  tags  tags  tags  tags  tags  tags  tags  tags  tags";
+  }
+}
+
+/* ---------------- Heading ---------------- */
+.about-head h2 {
+  margin-top: .9rem;
+  max-width: 18ch;
+}
+
+/* ---------------- Dominant introduction ---------------- */
+.about-intro__text {
+  font-size: clamp(1.0625rem, 1.55vw, 1.3125rem);
+  line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+/* ---------------- Mono micro-label ---------------- */
+.about-label {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ---------------- Philosophy ---------------- */
+.about-philosophy {
+  align-self: start;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid rgba(231, 198, 0, .28);
+  border-left: 2px solid var(--primary);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(180deg, rgba(26, 26, 26, .55), rgba(20, 20, 20, .68));
+  backdrop-filter: blur(16px);
+}
+.about-philosophy__text {
+  margin-top: .6rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 1.7vw, 1.25rem);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* ---------------- Metadata ---------------- */
+.about-meta {
+  align-self: start;
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+.about-meta div {
+  display: grid;
+  gap: .2rem;
+  padding-block: .8rem;
+  border-bottom: 1px solid var(--line);
+}
+.about-meta dt {
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.about-meta dd {
+  margin: 0;
+  font-size: .9375rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ---------------- Body blocks ---------------- */
+.about-body {
+  margin-top: .7rem;
+  font-size: .9375rem;
+  line-height: 1.75;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ---------------- Technical tags ---------------- */
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  align-content: start;
+}
+.about-tags li {
+  padding: .3rem .65rem;
+  border: 1px solid rgba(231, 198, 0, .25);
+  border-radius: var(--r-sm);
+  background: rgba(231, 198, 0, .1);
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--primary-2);
+  white-space: nowrap;
+}
+
+/* ---------------- Supporting cards ---------------- */
+.about-cards {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+@media (min-width: 860px) { .about-cards { grid-template-columns: 1fr 1fr; } }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--raised);
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tag--amber { border-color: rgba(231, 198, 0, .35); background: var(--amber-soft); color: var(--accent-tertiary); }
+
+.card--mym {
+  background:
+    radial-gradient(120% 100% at 0% 0%, rgba(231, 198, 0, .18), transparent 60%),
+    var(--panel);
+  border-color: rgba(231, 198, 0, .3);
+  overflow: hidden;
+}
+.card--mym h3 {
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1;
+  margin-top: .9rem;
+}
+.about-mym-status {
+  margin-top: 1.25rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent-tertiary);
+}
+
+/* ---------------- Journey timeline ---------------- */
+.timeline { display: grid; gap: 1.1rem; margin-top: 1.25rem; }
+.timeline li { position: relative; padding-left: 1.25rem; }
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: .55rem;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.timeline li::after {
+  content: "";
+  position: absolute;
+  left: 3px; top: 1.4rem; bottom: -1.1rem;
+  width: 1px;
+  background: var(--line);
+}
+.timeline li:last-child::after { display: none; }
+.timeline strong { display: block; font-size: .875rem; font-weight: 600; color: var(--ink); }
+.timeline span { display: block; margin-top: .15rem; font-size: .8125rem; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .about-cards .card,
+  .about-tags li { transition: none; }
+}

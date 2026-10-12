@@ -6,9 +6,9 @@ export default defineConfig(({ command }) => {
   const isDev = command === "serve";
 
   const devCsp =
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.emailjs.com ws://localhost:* ws://127.0.0.1:* http://localhost:* http://127.0.0.1:*; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'";
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.emailjs.com ws://localhost:* ws://127.0.0.1:* http://localhost:* http://127.0.0.1:*; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'";
   const previewCsp =
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.emailjs.com; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests";
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.emailjs.com; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'; upgrade-insecure-requests";
 
   return {
     plugins: [react()],
@@ -20,6 +20,11 @@ export default defineConfig(({ command }) => {
           manualChunks(id) {
             if (id.includes("node_modules/react") || id.includes("node_modules/react-dom")) {
               return "react-vendor";
+            }
+            // Keep the WebGL runtime out of the entry chunk - it is only
+            // needed once the hero scene mounts.
+            if (id.includes("node_modules/three") || id.includes("node_modules/@react-three")) {
+              return "three-vendor";
             }
             return undefined;
           },

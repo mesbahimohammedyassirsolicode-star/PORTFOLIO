@@ -1,71 +1,105 @@
 import { memo } from "react";
+import { motion } from "framer-motion";
+import { fadeUp, stagger, viewport } from "../lib/motion";
+import "./about-section.css";
 
-// About section — matches p01-accueil.html About + MYM + Journey + Mindset structure
+const TAGS = [
+  'about_tag_web',
+  'about_tag_mobile',
+  'about_tag_php',
+  'about_tag_laravel',
+  'about_tag_react',
+  'about_tag_mysql',
+  'about_tag_oop',
+  'about_tag_solid',
+  'about_tag_mvc',
+];
+
 function About({ t }) {
   return (
-    <section id="about">
+    <section className="about-section" id="about">
       <div className="wrap">
-        {/* Intro row */}
-        <div className="about-intro reveal">
-          <div>
-            <p className="eyebrow">{t('about_eyebrow')}</p>
-            <h2>{t('about_title')}</h2>
-          </div>
-          <div>
-            <p className="lead">{t('about_text')}</p>
-            <dl className="facts">
-              <div><dt>{t('f1_k')}</dt><dd>{t('f1_v')}</dd></div>
-              <div><dt>{t('f2_k')}</dt><dd>{t('f2_v')}</dd></div>
-              <div><dt>{t('f3_k')}</dt><dd>{t('f3_v')}</dd></div>
-            </dl>
-          </div>
-        </div>
+        <motion.div
+          className="about-grid"
+          variants={stagger(0.08)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewport}
+        >
+          {/* Heading */}
+          <header className="about-head">
+            <motion.p className="eyebrow" variants={fadeUp}>{t('about_eyebrow')}</motion.p>
+            <motion.h2 variants={fadeUp}>{t('about_title')}</motion.h2>
+          </header>
 
-        {/* Card grid */}
-        <div className="about-grid">
-          {/* MYM startup card (inverted) */}
-          <article className="card card-spotlight mym reveal">
-            <span className="spotlight-glow" aria-hidden="true" />
-            <span className="tag">{t('mym_tag')}</span>
-            <h3>Startup MYM</h3>
-            <p>{t('mym_desc')}</p>
-            <p className="status">{t('mym_status')}</p>
-          </article>
+          {/* Dominant introduction — read first, longest measure allowed */}
+          <motion.div className="about-intro" variants={fadeUp}>
+            <p className="about-intro__text">{t('about_intro')}</p>
+          </motion.div>
 
-          {/* Journey timeline */}
-          <article className="card card-spotlight reveal">
+          {/* Philosophy — an accent beat, not a competing headline */}
+          <motion.aside className="about-philosophy" variants={fadeUp}>
+            <p className="about-label">{t('about_philosophy_label')}</p>
+            <p className="about-philosophy__text">{t('about_philosophy')}</p>
+          </motion.aside>
+
+          {/* Profile metadata */}
+          <motion.dl className="about-meta" variants={fadeUp}>
+            <div><dt>{t('about_base')}</dt><dd>{t('about_base_v')}</dd></div>
+            <div><dt>{t('about_focus')}</dt><dd>{t('about_focus_detail')}</dd></div>
+            <div><dt>{t('about_edu')}</dt><dd>{t('about_edu_v')}</dd></div>
+          </motion.dl>
+
+          {/* Technical stack narrative + its tags, kept together */}
+          <motion.div className="about-tech" variants={fadeUp}>
+            <p className="about-label">{t('about_tech_label')}</p>
+            <p className="about-body">{t('about_technical')}</p>
+          </motion.div>
+
+          {/* Learning direction */}
+          <motion.div className="about-learning" variants={fadeUp}>
+            <p className="about-label">{t('about_learn_label')}</p>
+            <p className="about-body">{t('about_learning')}</p>
+          </motion.div>
+
+          {/* Technical tags — their own rail so both text columns stay balanced */}
+          <motion.ul className="about-tags" variants={fadeUp}>
+            {TAGS.map((tag) => <li key={tag}>{t(tag)}</li>)}
+          </motion.ul>
+        </motion.div>
+
+        {/* Supporting row — brand venture and study journey */}
+        <div className="about-cards">
+          <motion.article
+            className="card card--mym card-spotlight"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+          >
             <span className="spotlight-glow" aria-hidden="true" />
-            <h3>{t('tl_title')}</h3>
+            <span className="tag tag--amber">{t('about_mym_tag')}</span>
+            <h3>{t('about_mym_title')}</h3>
+            <p className="about-body">{t('about_mym_desc')}</p>
+            <p className="about-mym-status">{t('about_mym_status')}</p>
+          </motion.article>
+
+          <motion.article
+            className="card card-spotlight"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+          >
+            <span className="spotlight-glow" aria-hidden="true" />
+            <h3>{t('about_journey')}</h3>
             <ul className="timeline">
-              <li>
-                <strong>{t('t1')}</strong>
-                <span>{t('t1d')}</span>
-              </li>
-              <li>
-                <strong>{t('t2')}</strong>
-                <span>{t('t2d')}</span>
-              </li>
-              <li>
-                <strong>{t('t3')}</strong>
-                <span>{t('t3d')}</span>
-              </li>
-              <li>
-                <strong>{t('t4')}</strong>
-                <span>{t('t4d')}</span>
-              </li>
+              <li><strong>{t('journey_1')}</strong><span>{t('journey_1_d')}</span></li>
+              <li><strong>{t('journey_2')}</strong><span>{t('journey_2_d')}</span></li>
+              <li><strong>{t('journey_3')}</strong><span>{t('journey_3_d')}</span></li>
+              <li><strong>{t('journey_4')}</strong><span>{t('journey_4_d')}</span></li>
             </ul>
-          </article>
-
-          {/* Engineering mindset (full row) */}
-          <article className="card card-spotlight reveal full-row">
-            <span className="spotlight-glow" aria-hidden="true" />
-            <h3>{t('mind_title')}</h3>
-            <ul className="ticks">
-              <li>{t('mind1')}</li>
-              <li>{t('mind2')}</li>
-              <li>{t('mind3')}</li>
-            </ul>
-          </article>
+          </motion.article>
         </div>
       </div>
     </section>

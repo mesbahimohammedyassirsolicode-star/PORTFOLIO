@@ -1,0 +1,233 @@
+/* ============================================================
+   CONTACT — section scope
+   Namespaced under .contact-section so the global design system
+   and the other sections stay untouched.
+   ============================================================ */
+
+.contact-section { position: relative; }
+.contact-section > .wrap { position: relative; z-index: 1; }
+
+.contact-grid {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 960px) {
+  .contact-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); align-items: start; }
+}
+
+.contact-side { display: grid; gap: .75rem; align-content: start; }
+
+/* ---------------- Terminal panel ---------------- */
+.terminal {
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: rgba(13, 13, 13, .82);
+  overflow: hidden;
+}
+
+.terminal__head {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .6rem .9rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.terminal__dots { display: inline-flex; gap: .28rem; flex: none; }
+.terminal__dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line-2); }
+.terminal__dots i:first-child { background: rgba(255, 123, 114, .7); }
+.terminal__dots i:nth-child(2) { background: rgba(231, 198, 0, .7); }
+.terminal__dots i:last-child { background: rgba(61, 220, 132, .7); }
+
+.terminal__body { display: grid; gap: .85rem; padding: 1.1rem 1.1rem 1.25rem; }
+
+.terminal__row {
+  display: grid;
+  gap: .2rem .9rem;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  align-items: baseline;
+}
+.terminal__row dt {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.terminal__row dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: .8125rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.terminal__row dd a { color: var(--cyan); transition: color var(--dur); }
+.terminal__row dd a:hover { color: var(--primary-2); }
+
+.terminal__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+  padding: .85rem 1.1rem;
+  border-top: 1px solid var(--line);
+}
+.terminal__note {
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ---------------- Honeypot ----------------
+   The anti-spam field stays in the DOM so naive bots still fill it,
+   but it is clipped out of view and out of the tab order. It must NOT
+   use display:none, which would let some autofill engines skip it and
+   would also let a determined bot detect it. */
+.contact-hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------- Contact channel panel ---------------- */
+.contact-card { min-width: 0; }
+.contact-form { display: grid; gap: 1rem; }
+
+.two { display: grid; gap: 1rem; }
+@media (min-width: 560px) { .two { grid-template-columns: 1fr 1fr; } }
+
+/* ---------------- Submit / copy states ---------------- */
+.contact-submit { width: 100%; }
+
+.contact-copy {
+  min-height: 40px;
+  padding: .4rem .9rem;
+  white-space: nowrap;
+}
+.contact-copy.is-ok { border-color: rgba(61, 220, 132, .5); color: var(--ok); }
+.contact-copy.is-fail { border-color: rgba(255, 123, 114, .5); color: var(--err); }
+
+/* ---------------- GitHub link card ---------------- */
+.contact-link-card {
+  display: grid;
+  gap: .25rem;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--panel);
+  transition: border-color var(--dur), transform var(--dur) var(--ease);
+}
+.contact-link-card__kicker {
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.contact-link-card__title {
+  font-family: var(--font-mono);
+  font-size: .8125rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+@media (hover: hover) {
+  .contact-link-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .contact-link-card:hover .contact-link-card__title { color: var(--primary-2); }
+}
+
+/* ---------------- Form fields ---------------- */
+.field label {
+  display: block;
+  margin-bottom: .4rem;
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.field input,
+.field textarea {
+  width: 100%;
+  padding: .8rem .95rem;
+  border: 1px solid var(--line-input);
+  border-radius: var(--r-sm);
+  background: rgba(20, 20, 20, .8);
+  font-size: .9375rem;
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+.field textarea { resize: vertical; min-height: 8.5rem; }
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.field [aria-invalid="true"] { border-color: var(--err); }
+
+.field-err {
+  display: none;
+  align-items: center;
+  gap: .35rem;
+  margin-top: .35rem;
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--err);
+}
+.field-err::before { content: "\2715"; }
+.field [aria-invalid="true"] ~ .field-err { display: flex; }
+
+.form-alert {
+  display: none;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: .8rem .95rem;
+  border: 1px solid currentColor;
+  border-radius: var(--r-sm);
+  font-size: .875rem;
+}
+.form-alert.show { display: flex; }
+.form-alert.ok { background: var(--ok-soft); color: var(--ok); }
+.form-alert.bad { background: var(--err-soft); color: var(--err); }
+.form-alert svg { width: 1rem; height: 1rem; flex: none; margin-top: .2rem; }
+
+/* Quiet, user-facing note — no developer jargon. */
+.form-note { font-size: .75rem; line-height: 1.6; color: var(--faint); }
+
+.availability {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  letter-spacing: .08em;
+  color: var(--ok);
+}
+.availability i {
+  width: .4rem; height: .4rem;
+  border-radius: 50%;
+  background: var(--ok);
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-link-card,
+  .field input,
+  .field textarea { transition: none; }
+  .contact-link-card:hover { transform: none; }
+}

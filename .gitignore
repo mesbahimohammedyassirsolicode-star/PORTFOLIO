@@ -47,3 +47,16 @@ coverage/
 
 # Runtime/process files
 *.pid
+
+# Local-only design/analysis artifacts (not part of the deployable codebase)
+.agent/
+2.organisation-contenu/
+3.maquettage/
+DESIGN.md
+mym-hero.zip
+hero-app/
+hero.png
+screen.png
+scripts/_analyze-hero.mjs
+scripts/calc-wcag.mjs
+scripts/shot.mjs
